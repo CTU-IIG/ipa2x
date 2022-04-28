@@ -13,3 +13,12 @@ phone in the car. The application will:
   Auto screen mirroring.
 
 [FastDDS]: https://github.com/eProsima/Fast-DDS
+
+
+## External resources
+
+- [Shapes DDS demo for
+  Android](https://gitlab.fel.cvut.cz/marunluk/fastdds-shapes)
+  (currently accessible only to selected people). This is our initial
+  result of "porting" FastDDS to Android. It will be used as a
+  baseline for developing IPA2X Android app.
