@@ -1,0 +1,6 @@
+#include "Gps.idl"
+
+struct CrossingInfoType {
+    boolean danger;
+    gps coords;
+};

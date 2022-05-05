@@ -1,0 +1,7 @@
+#include "Gps.idl"
+
+struct CarInfoType {
+    short speed;
+    string dummy;
+    gps coords;
+};
