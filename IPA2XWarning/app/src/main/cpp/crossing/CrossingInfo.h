@@ -142,6 +142,25 @@ public:
     eProsima_user_DllExport bool& danger();
 
     /*!
+     * @brief This function sets a value in member crossing
+     * @param _crossing New value for member crossing
+     */
+    eProsima_user_DllExport void crossing(
+            bool _crossing);
+
+    /*!
+     * @brief This function returns the value of member crossing
+     * @return Value of member crossing
+     */
+    eProsima_user_DllExport bool crossing() const;
+
+    /*!
+     * @brief This function returns a reference to member crossing
+     * @return Reference to member crossing
+     */
+    eProsima_user_DllExport bool& crossing();
+
+    /*!
      * @brief This function copies the value in member dummy
      * @param _dummy New value to be copied in member dummy
      */
@@ -252,6 +271,7 @@ public:
 private:
 
     bool m_danger;
+    bool m_crossing;
     std::string m_dummy;
     gps m_coords;
 };

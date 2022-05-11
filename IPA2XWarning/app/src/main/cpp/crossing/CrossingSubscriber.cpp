@@ -33,7 +33,8 @@
 #include <android/log.h>
 #include <jni.h>
 
-jmethodID gMethod;
+jmethodID gWarningMethod;
+jmethodID gWarningInfoMethod;
 jobject gObject;
 JavaVM *java_vm;
 
@@ -55,12 +56,21 @@ public: class SubListener : public DataReaderListener {
 
     public:
 
-        SubListener() : samples_(0) {}
+        SubListener() : samples_(0) {
+            current_endpoints = 0;
+        }
 
         ~SubListener() override {}
 
         void on_subscription_matched(DataReader*, const SubscriptionMatchedStatus& info) override {
-            __android_log_print(ANDROID_LOG_VERBOSE, "cpptest", "Zmena v poctu publisheru");
+
+            java_vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_6);
+            java_vm->AttachCurrentThread(&env, NULL);
+            __android_log_print(ANDROID_LOG_VERBOSE, "cpptest", "Zmena %d, %d", info.current_count_change, info.total_count);
+            if (info.current_count_change == 1 || info.current_count_change == -1) {
+                current_endpoints += info.current_count_change;
+                env->CallVoidMethod(gObject, gWarningInfoMethod, current_endpoints.load());
+            }
         }
 
         void on_data_available(DataReader* reader) override {
@@ -72,18 +82,17 @@ public: class SubListener : public DataReaderListener {
             if (reader->take_next_sample(&message_, &info) == ReturnCode_t::RETCODE_OK) {
                 if (info.valid_data) {
                     bool danger = message_.danger();
-                    env->CallVoidMethod(gObject, gMethod, danger);
-                    if (message_.danger()) {
-                        __android_log_print(ANDROID_LOG_VERBOSE, "cpptest", "NEBEZPEČÍ!");
-                    } else {
-                        __android_log_print(ANDROID_LOG_VERBOSE, "cpptest", "Nebezpečí nehrozí");
-                    }
+                    bool crossing = message_.crossing();
+                    double lo = message_.coords().longtitude();
+                    double la = message_.coords().latitude();
+                    env->CallVoidMethod(gObject, gWarningMethod, danger, crossing, lo, la);
                 }
             }
         }
 
         CrossingInfoType message_;
         std::atomic_int samples_;
+        std::atomic_int current_endpoints;
 
     } listener_;
 
@@ -128,26 +137,28 @@ public:
 };
 
 
+
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_cz_cvut_fel_marunluk_ipa2xwarning_MainActivity_initCrossingSubscrier(JNIEnv *env, jobject thiz) {
+Java_cz_cvut_fel_marunluk_ipa2xwarning_CrossingHandler_initCrossingSubscrier(JNIEnv *env,
+                                                                             jobject thiz) {
     CrossingInfoSubscriber* subscriber = new CrossingInfoSubscriber();
     if (subscriber->init("topic")) {
         env->GetJavaVM(&java_vm);
         gObject = env->NewGlobalRef(thiz);
-        jclass lClass = env->FindClass("cz/cvut/fel/marunluk/ipa2xwarning/MainActivity");
-        gMethod = env->GetMethodID(lClass, "drawDanger", "(Z)V");
+        jclass lClass = env->FindClass("cz/cvut/fel/marunluk/ipa2xwarning/CrossingHandler");
+        gWarningMethod = env->GetMethodID(lClass, "parseCrossing", "(ZZDD)V");
+        gWarningInfoMethod = env->GetMethodID(lClass, "updateCrossingPublisherInfo", "(I)V");
         __android_log_print(ANDROID_LOG_VERBOSE, "cpptest", "Init done!");
         return (jlong) subscriber;
     }
     return 0;
 }
-
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_cz_cvut_fel_marunluk_ipa2xwarning_MainActivity_killCrossingSubscriber(JNIEnv *env,
-                                                                           jobject thiz,
-                                                                           jlong pointer) {
+Java_cz_cvut_fel_marunluk_ipa2xwarning_CrossingHandler_killCrossingSubscriber(JNIEnv *env,
+                                                                              jobject thiz,
+                                                                              jlong pointer) {
     CrossingInfoSubscriber* subscriber = (CrossingInfoSubscriber *) pointer;
     delete subscriber;
     return true;

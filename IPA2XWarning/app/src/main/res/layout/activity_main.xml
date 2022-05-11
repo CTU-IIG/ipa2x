@@ -8,20 +8,21 @@
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="396dp"
+        android:layout_width="match_parent"
         android:layout_height="559dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023"
+        app:layout_constraintVertical_bias="0.0"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TableLayout
         android:id="@+id/tableLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:stretchColumns="0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image"
         app:layout_constraintVertical_bias="0.88"
@@ -33,9 +34,9 @@
 
             <TextView
                 android:id="@+id/speedText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hello World!" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Current Speed" />
         </TableRow>
 
         <TableRow
@@ -44,9 +45,9 @@
 
             <TextView
                 android:id="@+id/latitudeText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Current Latitude" />
         </TableRow>
 
         <TableRow
@@ -55,9 +56,9 @@
 
             <TextView
                 android:id="@+id/longtitudeText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Current Longitude" />
         </TableRow>
 
         <TableRow
@@ -66,40 +67,53 @@
 
             <TextView
                 android:id="@+id/warningsText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Warning Publishers" />
 
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/crossingLatitudeText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:text="Crossing Latitude" />
+        </TableRow>
 
-                <Button
-                    android:id="@+id/button2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="random" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/crossingLongitudeText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:text="Crossing Longitude" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent">
 
                 <Button
                     android:id="@+id/button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="start" />
-            </LinearLayout>
+                    android:text="exit"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </TableRow>
 

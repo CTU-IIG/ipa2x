@@ -36,9 +36,9 @@ using namespace eprosima::fastcdr::exception;
 
 gps::gps()
 {
-    // m_longtitude com.eprosima.idl.parser.typecode.PrimitiveTypeCode@4d3167f4
+    // m_longtitude com.eprosima.idl.parser.typecode.PrimitiveTypeCode@4eb7f003
     m_longtitude = 0.0;
-    // m_latitude com.eprosima.idl.parser.typecode.PrimitiveTypeCode@ed9d034
+    // m_latitude com.eprosima.idl.parser.typecode.PrimitiveTypeCode@eafc191
     m_latitude = 0.0;
 
 }

@@ -1,6 +1,5 @@
 package cz.cvut.fel.marunluk.ipa2xwarning
 
-import java.lang.Double.doubleToLongBits
 import java.lang.Double.longBitsToDouble
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
