@@ -1,4 +1,4 @@
 struct gps {
-    double longtitude;
+    double longitude;
     double latitude;
 };
