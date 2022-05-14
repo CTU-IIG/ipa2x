@@ -70,27 +70,26 @@ public:
         DomainParticipantQos participantQos;
         participantQos.name("ANDROID PUBLISHER");
         participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos);
+        if (participant_ == nullptr) { return false; }
         type_.register_type(participant_);
-        topic_ = participant_->create_topic("topic", "CarInfoType", TOPIC_QOS_DEFAULT);
+        topic_ = participant_->create_topic("CarInfoTopic", "CarInfoType", TOPIC_QOS_DEFAULT);
+        if (topic_ == nullptr) { return false; }
         publisher_ = participant_->create_publisher(PUBLISHER_QOS_DEFAULT, nullptr);
+        if (publisher_ == nullptr) { return false; }
         writer_ = publisher_->create_datawriter(topic_, DATAWRITER_QOS_DEFAULT);
+        if (writer_ == nullptr) { return false; }
 
         return true;
     }
 
     //!Send a publication
     bool publish(int speed, double latitude, double longitude) {
-        std::cout << "Publishing\n";
-        if (1 > 0) {
-            message_.speed(speed);
-            message_.coords().latitude(latitude);
-            message_.coords().longtitude(longitude);
-            writer_->write(&message_);
-            return true;
-        }
-        return false;
+        message_.speed(speed);
+        message_.coords().latitude(latitude);
+        message_.coords().longtitude(longitude);
+        writer_->write(&message_);
+        return true;
     }
-
 };
 
 
@@ -102,6 +101,7 @@ Java_cz_cvut_fel_marunluk_ipa2xwarning_InfoHandler_initInfoPublisher(JNIEnv *env
     if (publisher->init()) {
         return (jlong) publisher;
     }
+    delete publisher;
     return 0;
 }
 extern "C"
@@ -109,8 +109,11 @@ JNIEXPORT jlong JNICALL
 Java_cz_cvut_fel_marunluk_ipa2xwarning_InfoHandler_killInfoPublisher(JNIEnv *env, jobject thiz,
                                                                      jlong pointer) {
     CarInfoPublisher* publisher = (CarInfoPublisher*) pointer;
-    delete publisher;
-    return true;
+    if (publisher != nullptr) {
+        delete publisher;
+        return true;
+    }
+    return false;
 }
 
 extern "C"
@@ -120,5 +123,8 @@ Java_cz_cvut_fel_marunluk_ipa2xwarning_InfoHandler_sendInfoPublisher(JNIEnv *env
                                                                      jdouble longitude,
                                                                      jdouble latitude, jint speed) {
     CarInfoPublisher* publisher = (CarInfoPublisher*) pointer;
-    return publisher->publish(speed, latitude, longitude);
+    if (publisher != nullptr) {
+        return publisher->publish(speed, latitude, longitude);
+    }
+    return false;
 }

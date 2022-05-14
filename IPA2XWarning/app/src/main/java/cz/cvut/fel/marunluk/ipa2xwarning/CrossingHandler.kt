@@ -1,5 +1,6 @@
 package cz.cvut.fel.marunluk.ipa2xwarning
 
+import android.util.Log
 import java.lang.Double.doubleToLongBits
 
 class CrossingHandler(private var context: MainActivity) : Runnable {
@@ -12,6 +13,7 @@ class CrossingHandler(private var context: MainActivity) : Runnable {
             Thread.sleep(500)
         }
         killCrossingSubscriber(sub)
+        Log.d("CrossingHandler", "Thread exiting");
     }
 
     fun parseCrossing(danger: Boolean, crossing: Boolean, longitude: Double, latitude: Double) {

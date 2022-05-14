@@ -1,5 +1,6 @@
 package cz.cvut.fel.marunluk.ipa2xwarning
 
+import android.util.Log
 import java.lang.Double.longBitsToDouble
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
@@ -15,6 +16,7 @@ class InfoHandler(private val longitude_p: AtomicLong, private val latitude_p: A
             Thread.sleep(500)
         }
         killInfoPublisher(publisher)
+        Log.d("InfoHandler", "Thread exiting");
     }
 
     fun terminate() {

@@ -37,8 +37,16 @@ jmethodID gWarningMethod;
 jmethodID gWarningInfoMethod;
 jobject gObject;
 JavaVM *java_vm;
+static pthread_key_t key;
 
 using namespace eprosima::fastdds::dds;
+
+static void thread_destructor(void* ptr) {
+    JNIEnv* env = static_cast<JNIEnv *>(ptr);
+    __android_log_print(ANDROID_LOG_VERBOSE, "Sub attached", "About to detach!");
+    java_vm->DetachCurrentThread();
+    __android_log_print(ANDROID_LOG_VERBOSE, "Sub attached", "Detached!");
+}
 
 class CrossingInfoSubscriber {
 
@@ -56,7 +64,7 @@ public: class SubListener : public DataReaderListener {
 
     public:
 
-        SubListener() : samples_(0) {
+        SubListener() {
             current_endpoints = 0;
         }
 
@@ -66,7 +74,8 @@ public: class SubListener : public DataReaderListener {
 
             java_vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_6);
             java_vm->AttachCurrentThread(&env, NULL);
-            __android_log_print(ANDROID_LOG_VERBOSE, "cpptest", "Zmena %d, %d", info.current_count_change, info.total_count);
+            pthread_setspecific(key, env);
+
             if (info.current_count_change == 1 || info.current_count_change == -1) {
                 current_endpoints += info.current_count_change;
                 env->CallVoidMethod(gObject, gWarningInfoMethod, current_endpoints.load());
@@ -77,6 +86,7 @@ public: class SubListener : public DataReaderListener {
 
             java_vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_6);
             java_vm->AttachCurrentThread(&env, NULL);
+            pthread_setspecific(key, env);
 
             SampleInfo info;
             if (reader->take_next_sample(&message_, &info) == ReturnCode_t::RETCODE_OK) {
@@ -91,7 +101,6 @@ public: class SubListener : public DataReaderListener {
         }
 
         CrossingInfoType message_;
-        std::atomic_int samples_;
         std::atomic_int current_endpoints;
 
     } listener_;
@@ -118,19 +127,19 @@ public:
     }
 
     //!Initialize the subscriber
-    bool init(std::string _topic = "top") {
+    bool init() {
 
         DomainParticipantQos participantQos;
         participantQos.name("ANDROID SUBSCRIBER");
-        std::shared_ptr<eprosima::fastdds::rtps::UDPv4TransportDescriptor> descriptor = std::make_shared<eprosima::fastdds::rtps::UDPv4TransportDescriptor>();
-        participantQos.transport().user_transports.push_back(descriptor);
-        participant_ = DomainParticipantFactory::get_instance()->create_participant(0, PARTICIPANT_QOS_DEFAULT);
+        participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos);
+        if (participant_ == nullptr) { return false; }
         type_.register_type(participant_);
-        topic_ = participant_->create_topic(_topic, "CrossingInfoType", TOPIC_QOS_DEFAULT);
+        topic_ = participant_->create_topic("CrossingTopic", "CrossingInfoType", TOPIC_QOS_DEFAULT);
+        if (topic_ == nullptr) { return false; }
         subscriber_ = participant_->create_subscriber(SUBSCRIBER_QOS_DEFAULT, nullptr);
-        //DataReaderQos* qos = new DataReaderQos();
+        if (subscriber_ == nullptr) { return false; }
         reader_ = subscriber_->create_datareader(topic_, DATAREADER_QOS_DEFAULT, &listener_);
-
+        if (reader_ == nullptr) { return false; }
         return true;
     }
 
@@ -140,26 +149,28 @@ public:
 
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_cz_cvut_fel_marunluk_ipa2xwarning_CrossingHandler_initCrossingSubscrier(JNIEnv *env,
-                                                                             jobject thiz) {
+Java_cz_cvut_fel_marunluk_ipa2xwarning_CrossingHandler_initCrossingSubscrier(JNIEnv *env, jobject thiz) {
     CrossingInfoSubscriber* subscriber = new CrossingInfoSubscriber();
-    if (subscriber->init("topic")) {
+    if (subscriber->init()) {
+        pthread_key_create(&key, thread_destructor);
         env->GetJavaVM(&java_vm);
         gObject = env->NewGlobalRef(thiz);
         jclass lClass = env->FindClass("cz/cvut/fel/marunluk/ipa2xwarning/CrossingHandler");
         gWarningMethod = env->GetMethodID(lClass, "parseCrossing", "(ZZDD)V");
         gWarningInfoMethod = env->GetMethodID(lClass, "updateCrossingPublisherInfo", "(I)V");
-        __android_log_print(ANDROID_LOG_VERBOSE, "cpptest", "Init done!");
+        __android_log_print(ANDROID_LOG_VERBOSE, "CrossingSubscriber", "Init done!");
         return (jlong) subscriber;
     }
+    delete subscriber;
     return 0;
 }
 extern "C"
 JNIEXPORT jboolean JNICALL
-Java_cz_cvut_fel_marunluk_ipa2xwarning_CrossingHandler_killCrossingSubscriber(JNIEnv *env,
-                                                                              jobject thiz,
-                                                                              jlong pointer) {
+Java_cz_cvut_fel_marunluk_ipa2xwarning_CrossingHandler_killCrossingSubscriber(JNIEnv *env, jobject thiz, jlong pointer) {
     CrossingInfoSubscriber* subscriber = (CrossingInfoSubscriber *) pointer;
-    delete subscriber;
-    return true;
+    if (subscriber != nullptr) {
+        delete subscriber;
+        return true;
+    }
+    return false;
 }

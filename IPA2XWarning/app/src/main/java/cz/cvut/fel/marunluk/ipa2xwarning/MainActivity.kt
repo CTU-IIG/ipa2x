@@ -45,24 +45,30 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private val pubHandlerT = Thread(pubHandler)
     private val subHandlerT = Thread(subHandler)
 
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        configure()
-        drawDangerImage(currentState)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
 
         configure()
+
+        locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), locationPermissionCode)
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0.5f, this)
+
         mp1 = MediaPlayer.create(this, R.raw.chime1a)
         mp2 = MediaPlayer.create(this, R.raw.chime2a)
 
         pubHandlerT.start()
         subHandlerT.start()
 
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        configure()
+        drawDangerImage(currentState)
     }
 
     override fun onDestroy() {
@@ -73,6 +79,22 @@ class MainActivity : AppCompatActivity(), LocationListener {
         mp1.release()
         mp2.stop()
         mp2.release()
+        pubHandlerT.join()
+        subHandlerT.join()
+    }
+
+    override fun onLocationChanged(location: Location) {
+
+        longitude.set(doubleToLongBits(location.longitude))
+        latitude.set(doubleToLongBits(location.latitude))
+        binding.latitudeText.text = "Latitude: ${location.latitude}"
+        binding.longtitudeText.text = "Longtitude: ${location.longitude}"
+
+        if (location.hasSpeed()) {
+            binding.speedText.text = "Rychlost: ${(location.speed * 3.6).toInt()}"
+            speed.set((location.speed * 3.6).toInt())
+        }
+
     }
 
     private fun configure() {
@@ -87,29 +109,9 @@ class MainActivity : AppCompatActivity(), LocationListener {
         binding.crossingLatitudeText.text = "Crossing Latitude: ${longBitsToDouble(clatitude.get())}"
         binding.crossingLongitudeText.text = "Crossing Longitude: ${longBitsToDouble(clongitude.get())}"
 
-        locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
-        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), locationPermissionCode)
-        }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0.5f, this)
-
         binding.button.setOnClickListener {
             finishAndRemoveTask()
         }
-    }
-
-    override fun onLocationChanged(location: Location) {
-
-        longitude.set(doubleToLongBits(location.longitude))
-        latitude.set(doubleToLongBits(location.latitude))
-        binding.latitudeText!!.text = "Latitude: ${location.latitude}"
-        binding.longtitudeText.text = "Longtitude: ${location.longitude}"
-
-        if (location.hasSpeed()) {
-            binding.speedText.text = "Rychlost: ${(location.speed * 3.6).toInt()}"
-            speed.set((location.speed * 3.6).toInt())
-        }
-
     }
 
     fun drawDanger(danger: Boolean, crossing: Boolean) {
