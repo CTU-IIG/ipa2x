@@ -52,7 +52,7 @@ public: class SubListener : public DataReaderListener {
         ~SubListener() override {}
 
         void on_subscription_matched(DataReader*, const SubscriptionMatchedStatus& info) override {
-            std::cout << "Zmena v poctu publisheru" << std::endl;
+            std::cout << "Number of publishers changed" << std::endl;
         }
 
         void on_data_available(DataReader* reader) override {
@@ -60,7 +60,7 @@ public: class SubListener : public DataReaderListener {
             SampleInfo info;
             if (reader->take_next_sample(&message_, &info) == ReturnCode_t::RETCODE_OK) {
                 if (info.valid_data) {
-                    std::cout << "Auto at " << message_.coords().longtitude() << " " << message_.coords().latitude() << " going " << message_.speed() << " km/h" << std::endl;
+                    std::cout << "Car at " << message_.coords().longtitude() << " " << message_.coords().latitude() << " going " << message_.speed() << " km/h" << std::endl;
                 } else {
                     std::cout << "Got invalid data" << std::endl;
                 }
@@ -97,10 +97,10 @@ public:
     bool init() {
 
         DomainParticipantQos participantQos;
-        participantQos.name("ANDROID SUBSCRIBER");
+        participantQos.name("Dummy rover SUBSCRIBER");
         participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos);
         type_.register_type(participant_);
-        topic_ = participant_->create_topic("topic", "CarInfoType", TOPIC_QOS_DEFAULT);
+        topic_ = participant_->create_topic("CarInfoTopic", "CarInfoType", TOPIC_QOS_DEFAULT);
         subscriber_ = participant_->create_subscriber(SUBSCRIBER_QOS_DEFAULT, nullptr);
         reader_ = subscriber_->create_datareader(topic_, DATAREADER_QOS_DEFAULT, &listener_);
 
@@ -117,13 +117,10 @@ public:
 
 
 int main() {
-
+    std::cout.precision(10);
     CarInfoSubscriber* subscriber = new CarInfoSubscriber();
     subscriber->init();
-
-    subscriber->run(10);
-    
-
+    subscriber->run(100);
     delete subscriber;
     return 0;
 }

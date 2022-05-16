@@ -52,7 +52,7 @@ public: class SubListener : public DataReaderListener {
         ~SubListener() override {}
 
         void on_subscription_matched(DataReader*, const SubscriptionMatchedStatus& info) override {
-            std::cout << "Zmena v poctu publisheru" << std::endl;
+            std::cout << "Number of publishers changed" << std::endl;
         }
 
         void on_data_available(DataReader* reader) override {
@@ -61,11 +61,13 @@ public: class SubListener : public DataReaderListener {
             if (reader->take_next_sample(&message_, &info) == ReturnCode_t::RETCODE_OK) {
                 if (info.valid_data) {
                     if (message_.danger()) {
-                        std::cout << "NEBEZPEČÍ!";
+                        std::cout << "DANGER!";
+                    } else if (message_.crossing()) {
+                        std::cout << "Crossing occupied";
                     } else {
-                        std::cout << "Nebezpečí nehrozí";
+                        std::cout << "Clear of conflict";
                     }
-                    std::cout << " At " << message_.coords().longtitude() << " " << message_.coords().latitude() << std::endl;
+                    std::cout << " at " << message_.coords().longtitude() << " " << message_.coords().latitude() << std::endl;
                 } else {
                     std::cout << "Got invalid data" << std::endl;
                 }
@@ -102,10 +104,10 @@ public:
     bool init() {
 
         DomainParticipantQos participantQos;
-        participantQos.name("ANDROID SUBSCRIBER");
+        participantQos.name("Rover dummy SUBSCRIBER");
         participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos);
         type_.register_type(participant_);
-        topic_ = participant_->create_topic("topic", "CrossingInfoType", TOPIC_QOS_DEFAULT);
+        topic_ = participant_->create_topic("CrossingTopic", "CrossingInfoType", TOPIC_QOS_DEFAULT);
         subscriber_ = participant_->create_subscriber(SUBSCRIBER_QOS_DEFAULT, nullptr);
         reader_ = subscriber_->create_datareader(topic_, DATAREADER_QOS_DEFAULT, &listener_);
 
@@ -122,13 +124,10 @@ public:
 
 
 int main() {
-
+    std::cout.precision(10);
     CrossingInfoSubscriber* subscriber = new CrossingInfoSubscriber();
     subscriber->init();
-
     subscriber->run(10);
-    
-
     delete subscriber;
     return 0;
 }

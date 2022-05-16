@@ -67,10 +67,10 @@ public:
     bool init() {
 
         DomainParticipantQos participantQos;
-        participantQos.name("ANDROID PUBLISHER");
+        participantQos.name("Rover dummy PUBLISHER");
         participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos);
         type_.register_type(participant_);
-        topic_ = participant_->create_topic("topic", "CarInfoType", TOPIC_QOS_DEFAULT);
+        topic_ = participant_->create_topic("CarInfoTopic", "CarInfoType", TOPIC_QOS_DEFAULT);
         publisher_ = participant_->create_publisher(PUBLISHER_QOS_DEFAULT, nullptr);
         writer_ = publisher_->create_datawriter(topic_, DATAWRITER_QOS_DEFAULT);
 
@@ -78,16 +78,15 @@ public:
     }
 
     //!Send a publication
-    bool publish(int value) {
+    void publish(int value) {
         std::cout << "Publishing\n";
-        if (1 > 0) {
-            message_.speed(value);
-            message_.coords().latitude(value + 50.1027778F);
-            message_.coords().longtitude(value + 14.3945306F);
-            writer_->write(&message_);
-            return true;
+        message_.speed(value);
+        if (value == 0) {
+            value = 10000000;
         }
-        return false;
+        message_.coords().latitude((5/value) + 50.1027778F);
+        message_.coords().longtitude((5/value) + 14.3945306F);
+        writer_->write(&message_);
     }
 
 };
@@ -96,6 +95,7 @@ int main() {
 
     CarInfoPublisher* publisher = new CarInfoPublisher();   
     publisher->init();
+    std::cout << "Type speed (will be used as GPS modifier as well)" << std::endl;
     std::string c;
     while (1) {
         std::cin >> c;

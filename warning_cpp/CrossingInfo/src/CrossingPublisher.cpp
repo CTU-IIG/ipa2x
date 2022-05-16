@@ -67,10 +67,10 @@ public:
     bool init() {
 
         DomainParticipantQos participantQos;
-        participantQos.name("ANDROID PUBLISHER");
+        participantQos.name("Rover dummy PUBLISHER");
         participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos);
         type_.register_type(participant_);
-        topic_ = participant_->create_topic("topic", "CrossingInfoType", TOPIC_QOS_DEFAULT);
+        topic_ = participant_->create_topic("CrossingTopic", "CrossingInfoType", TOPIC_QOS_DEFAULT);
         publisher_ = participant_->create_publisher(PUBLISHER_QOS_DEFAULT, nullptr);
         writer_ = publisher_->create_datawriter(topic_, DATAWRITER_QOS_DEFAULT);
 
@@ -78,16 +78,13 @@ public:
     }
 
     //!Send a publication
-    bool publish(bool value) {
+    void publish(bool danger, bool crossing) {
         std::cout << "Publishing\n";
-        if (1 > 0) {
-            message_.danger(value);
-            message_.coords().latitude(50.1027778F);
-            message_.coords().longtitude(14.3945306F);
-            writer_->write(&message_);
-            return true;
-        }
-        return false;
+        message_.danger(danger);
+        message_.crossing(crossing);
+        message_.coords().latitude(50.1027778F);
+        message_.coords().longtitude(14.3945306F);
+        writer_->write(&message_);
     }
 
 };
@@ -96,14 +93,15 @@ int main() {
 
     CrossingInfoPublisher* publisher = new CrossingInfoPublisher();   
     publisher->init();
+    std::cout << "x: crossing" << std::endl << "c: clear" << std::endl << "d: danger" << std::endl << "q: quit" << std::endl;
     char c;
     while (std::cin >> c) {
         if (c == 'C' || c == 'c') {
-            publisher->publish(false);
+            publisher->publish(false, false);
         } else if (c == 'X' || c == 'x') {
-            publisher->publish(true);
+            publisher->publish(false, true);
         } else if (c == 'D' || c == 'd') {
-            publisher->publish(true);
+            publisher->publish(true, true);
         } else if (c == 'Q' || c == 'q') {
             break;
         }

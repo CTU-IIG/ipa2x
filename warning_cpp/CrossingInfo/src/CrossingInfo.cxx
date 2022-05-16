@@ -38,9 +38,11 @@ CrossingInfoType::CrossingInfoType()
 {
     // m_danger com.eprosima.idl.parser.typecode.PrimitiveTypeCode@6b57696f
     m_danger = false;
-    // m_dummy com.eprosima.idl.parser.typecode.StringTypeCode@5bb21b69
+    // m_crossing com.eprosima.idl.parser.typecode.PrimitiveTypeCode@5bb21b69
+    m_crossing = false;
+    // m_dummy com.eprosima.idl.parser.typecode.StringTypeCode@6b9651f3
     m_dummy ="";
-    // m_coords com.eprosima.fastdds.idl.parser.typecode.StructTypeCode@6b9651f3
+    // m_coords com.eprosima.fastdds.idl.parser.typecode.StructTypeCode@38bc8ab5
 
 
 }
@@ -50,12 +52,14 @@ CrossingInfoType::~CrossingInfoType()
 
 
 
+
 }
 
 CrossingInfoType::CrossingInfoType(
         const CrossingInfoType& x)
 {
     m_danger = x.m_danger;
+    m_crossing = x.m_crossing;
     m_dummy = x.m_dummy;
     m_coords = x.m_coords;
 }
@@ -64,6 +68,7 @@ CrossingInfoType::CrossingInfoType(
         CrossingInfoType&& x)
 {
     m_danger = x.m_danger;
+    m_crossing = x.m_crossing;
     m_dummy = std::move(x.m_dummy);
     m_coords = std::move(x.m_coords);
 }
@@ -73,6 +78,7 @@ CrossingInfoType& CrossingInfoType::operator =(
 {
 
     m_danger = x.m_danger;
+    m_crossing = x.m_crossing;
     m_dummy = x.m_dummy;
     m_coords = x.m_coords;
 
@@ -84,6 +90,7 @@ CrossingInfoType& CrossingInfoType::operator =(
 {
 
     m_danger = x.m_danger;
+    m_crossing = x.m_crossing;
     m_dummy = std::move(x.m_dummy);
     m_coords = std::move(x.m_coords);
 
@@ -94,7 +101,7 @@ bool CrossingInfoType::operator ==(
         const CrossingInfoType& x) const
 {
 
-    return (m_danger == x.m_danger && m_dummy == x.m_dummy && m_coords == x.m_coords);
+    return (m_danger == x.m_danger && m_crossing == x.m_crossing && m_dummy == x.m_dummy && m_coords == x.m_coords);
 }
 
 bool CrossingInfoType::operator !=(
@@ -107,6 +114,9 @@ size_t CrossingInfoType::getMaxCdrSerializedSize(
         size_t current_alignment)
 {
     size_t initial_alignment = current_alignment;
+
+
+    current_alignment += 1 + eprosima::fastcdr::Cdr::alignment(current_alignment, 1);
 
 
     current_alignment += 1 + eprosima::fastcdr::Cdr::alignment(current_alignment, 1);
@@ -130,6 +140,9 @@ size_t CrossingInfoType::getCdrSerializedSize(
     current_alignment += 1 + eprosima::fastcdr::Cdr::alignment(current_alignment, 1);
 
 
+    current_alignment += 1 + eprosima::fastcdr::Cdr::alignment(current_alignment, 1);
+
+
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + data.dummy().size() + 1;
 
     current_alignment += gps::getCdrSerializedSize(data.coords(), current_alignment);
@@ -142,6 +155,7 @@ void CrossingInfoType::serialize(
 {
 
     scdr << m_danger;
+    scdr << m_crossing;
     scdr << m_dummy;
     scdr << m_coords;
 
@@ -152,6 +166,7 @@ void CrossingInfoType::deserialize(
 {
 
     dcdr >> m_danger;
+    dcdr >> m_crossing;
     dcdr >> m_dummy;
     dcdr >> m_coords;
 }
@@ -182,6 +197,34 @@ bool CrossingInfoType::danger() const
 bool& CrossingInfoType::danger()
 {
     return m_danger;
+}
+
+/*!
+ * @brief This function sets a value in member crossing
+ * @param _crossing New value for member crossing
+ */
+void CrossingInfoType::crossing(
+        bool _crossing)
+{
+    m_crossing = _crossing;
+}
+
+/*!
+ * @brief This function returns the value of member crossing
+ * @return Value of member crossing
+ */
+bool CrossingInfoType::crossing() const
+{
+    return m_crossing;
+}
+
+/*!
+ * @brief This function returns a reference to member crossing
+ * @return Reference to member crossing
+ */
+bool& CrossingInfoType::crossing()
+{
+    return m_crossing;
 }
 
 /*!
@@ -269,6 +312,7 @@ size_t CrossingInfoType::getKeyMaxCdrSerializedSize(
 
 
 
+
     return current_align;
 }
 
@@ -281,5 +325,5 @@ void CrossingInfoType::serializeKey(
         eprosima::fastcdr::Cdr& scdr) const
 {
     (void) scdr;
-       
+        
 }
