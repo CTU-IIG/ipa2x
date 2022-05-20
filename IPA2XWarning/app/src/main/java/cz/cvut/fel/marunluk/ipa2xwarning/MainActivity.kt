@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
     private var currentState: Int = 0
 
+    // Stored values
     var subscribers: AtomicInteger = AtomicInteger(0)
     var longitude: AtomicLong = AtomicLong(0)
     var latitude: AtomicLong = AtomicLong(0)
@@ -39,9 +40,11 @@ class MainActivity : AppCompatActivity(), LocationListener {
     var clatitude: AtomicLong = AtomicLong(0)
     var speed: AtomicInteger = AtomicInteger(0)
 
+    // Threads runnables
     private val pubHandler = InfoHandler(longitude, latitude, speed)
     private val subHandler = CrossingHandler(this)
 
+    // Thread instances
     private val pubHandlerT = Thread(pubHandler)
     private val subHandlerT = Thread(subHandler)
 
@@ -60,6 +63,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         mp1 = MediaPlayer.create(this, R.raw.chime1a)
         mp2 = MediaPlayer.create(this, R.raw.chime2a)
 
+        // Start handler threads
         pubHandlerT.start()
         subHandlerT.start()
 
@@ -68,30 +72,38 @@ class MainActivity : AppCompatActivity(), LocationListener {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         configure()
+        // Restore previous image
         drawDangerImage(currentState)
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        // Send terminate singal to threads
         pubHandler.terminate()
         subHandler.terminate()
+        // Stop and release players
         mp1.stop()
         mp1.release()
         mp2.stop()
         mp2.release()
+        // Wait for threads
         pubHandlerT.join()
         subHandlerT.join()
     }
 
     override fun onLocationChanged(location: Location) {
 
+        // Update stored locations
         longitude.set(doubleToLongBits(location.longitude))
         latitude.set(doubleToLongBits(location.latitude))
+        // Update onscreen location
         binding.latitudeText.text = "Latitude: ${location.latitude}"
         binding.longtitudeText.text = "Longtitude: ${location.longitude}"
 
         if (location.hasSpeed()) {
+            // Update onscreen speed
             binding.speedText.text = "Rychlost: ${(location.speed * 3.6).toInt()}"
+            // Update stored speed
             speed.set((location.speed * 3.6).toInt())
         }
 
@@ -102,6 +114,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Init labels
         binding.latitudeText.text = "Latitude: ${longBitsToDouble(latitude.get())}"
         binding.longtitudeText.text = "Longtitude: ${longBitsToDouble(longitude.get())}"
         binding.speedText.text = "Speed: ${speed.get()}"
@@ -114,6 +127,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         }
     }
 
+    // View and play warning based on boolean states
     fun drawDanger(danger: Boolean, crossing: Boolean) {
 
         var cs: Int
@@ -140,11 +154,13 @@ class MainActivity : AppCompatActivity(), LocationListener {
         }
     }
 
+    // Stop and rewind player
     private fun stopPlayer(mp: MediaPlayer) {
         if (mp.isPlaying) { mp.pause() }
         mp.seekTo(0)
     }
 
+    // Displays proper animation based on state
     private fun drawDangerImage(state: Int) {
         when (state) {
             1 -> {

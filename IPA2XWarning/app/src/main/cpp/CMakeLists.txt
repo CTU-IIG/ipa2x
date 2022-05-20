@@ -2,7 +2,7 @@
 # documentation: https://d.android.com/studio/projects/add-native-code.html
 
 # Sets the minimum version of CMake required to build the native library.
-set(DDS_PATH D:/FEL/PRJ/DDS/Fast-DDS6/install/)
+set(DDS_PATH D:/FEL/PRJ/DDS/Fast-DDSw/install/)
 cmake_minimum_required(VERSION 3.10.2)
 
 # Declares and names the project.

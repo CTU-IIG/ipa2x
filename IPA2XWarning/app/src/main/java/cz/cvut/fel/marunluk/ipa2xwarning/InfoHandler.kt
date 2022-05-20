@@ -10,12 +10,12 @@ class InfoHandler(private val longitude_p: AtomicLong, private val latitude_p: A
     private var running = true;
 
     override fun run() {
-        val publisher = initInfoPublisher()
+        val pub = initInfoPublisher()
         while (running) {
-            sendInfoPublisher(publisher, longBitsToDouble(longitude_p.get()), longBitsToDouble(latitude_p.get()), speed_p.get())
+            sendInfoPublisher(pub, longBitsToDouble(longitude_p.get()), longBitsToDouble(latitude_p.get()), speed_p.get())
             Thread.sleep(500)
         }
-        killInfoPublisher(publisher)
+        killInfoPublisher(pub)
         Log.d("InfoHandler", "Thread exiting");
     }
 

@@ -16,18 +16,18 @@ class CrossingHandler(private var context: MainActivity) : Runnable {
         Log.d("CrossingHandler", "Thread exiting");
     }
 
+    fun terminate() {
+        running = false;
+    }
+
     fun parseCrossing(danger: Boolean, crossing: Boolean, longitude: Double, latitude: Double) {
         context.drawDanger(danger, crossing)
         context.clatitude.set(doubleToLongBits(latitude))
         context.clongitude.set(doubleToLongBits(longitude))
         context.runOnUiThread {
             context.binding.crossingLatitudeText.text = "Crossing Latitude: $latitude"
-            context.binding.crossingLongitudeText.text = longitude.toString()
+            context.binding.crossingLongitudeText.text = "Crossing Longitude: $longitude"
         }
-    }
-
-    fun terminate() {
-        running = false;
     }
 
     fun updateCrossingPublisherInfo(number: Int) {
@@ -36,7 +36,6 @@ class CrossingHandler(private var context: MainActivity) : Runnable {
             context.runOnUiThread { context.binding.warningsText.text = "$number publishers connected" }
         }
     }
-
 
     external fun initCrossingSubscrier(): Long
 
