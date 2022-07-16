@@ -129,7 +129,27 @@ public:
     //!Initialize the subscriber
     bool init() {
 
-        DomainParticipantQos participantQos;
+        DomainParticipantQos participantQos = PARTICIPANT_QOS_DEFAULT;
+
+        // Set participant as CLIENT
+        participantQos.wire_protocol().builtin.discovery_config.discoveryProtocol = eprosima::fastrtps::rtps::DiscoveryProtocol_t::CLIENT;
+
+        // Set SERVER's GUID prefix
+        eprosima::fastrtps::rtps::RemoteServerAttributes remote_server_att;
+        remote_server_att.ReadguidPrefix("44.53.00.5f.45.50.52.4f.53.49.4d.41");
+
+        // Set SERVER's listening locator for PDP
+        eprosima::fastrtps::rtps::Locator_t locator;
+        eprosima::fastrtps::rtps::IPLocator::setIPv4(locator, 192, 168, 162, 10);
+        //eprosima::fastrtps::rtps::IPLocator::setIPv4(locator, 185, 63, 96, 172);
+        locator.port = 11811;
+        remote_server_att.metatrafficUnicastLocatorList.push_back(locator);
+
+        // Add remote SERVER to CLIENT's list of SERVERs
+        participantQos.wire_protocol().builtin.discovery_config.m_DiscoveryServers.push_back(remote_server_att);
+
+        // Set ping period to 250 ms
+        participantQos.wire_protocol().builtin.discovery_config.discoveryServer_client_syncperiod = eprosima::fastrtps::Duration_t(0, 250000000);
         participantQos.name("ANDROID SUBSCRIBER");
         participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos);
         if (participant_ == nullptr) { return false; }
