@@ -17,18 +17,9 @@
  *
  */
 
-#include "CrossingInfoPubSubTypes.h"
-#include "GpsPubSubTypes.h"
-
 #include <fastdds/dds/domain/DomainParticipantFactory.hpp>
 #include <fastdds/dds/domain/DomainParticipant.hpp>
-#include <fastdds/dds/topic/TypeSupport.hpp>
-#include <fastdds/dds/publisher/Publisher.hpp>
-#include <fastdds/dds/publisher/DataWriter.hpp>
-#include <fastdds/dds/publisher/DataWriterListener.hpp>
-#include <fastdds/rtps/transport/UDPv4TransportDescriptor.h>
 #include <fastdds/rtps/common/Locator.h>
-#include <fastdds/dds/domain/DomainParticipant.hpp>
 
 using namespace eprosima::fastdds::dds;
 

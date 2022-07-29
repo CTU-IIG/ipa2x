@@ -28,13 +28,6 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANG OR
 endif()
 
 message(STATUS "Configuring HelloWorld publisher/subscriber example...")
-file(GLOB DDS_HELLOWORLD_SOURCES_CXX "src/*.cxx")
 
-add_executable(DDSPublisher src/CrossingPublisher.cpp ${DDS_HELLOWORLD_SOURCES_CXX})
-target_link_libraries(DDSPublisher fastrtps fastcdr)
-
-add_executable(DDSSubscriber src/CrossingSubscriber.cpp ${DDS_HELLOWORLD_SOURCES_CXX})
-target_link_libraries(DDSSubscriber fastrtps fastcdr)
-
-add_executable(DDSServer src/CrossingServer.cpp ${DDS_HELLOWORLD_SOURCES_CXX})
+add_executable(DDSServer src/CrossingServer.cpp)
 target_link_libraries(DDSServer fastrtps fastcdr)
