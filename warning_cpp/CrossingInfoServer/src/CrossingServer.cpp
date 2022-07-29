@@ -17,6 +17,8 @@
  *
  */
 
+#include <unistd.h>
+
 #include <fastdds/dds/domain/DomainParticipantFactory.hpp>
 #include <fastdds/dds/domain/DomainParticipant.hpp>
 #include <fastdds/rtps/common/Locator.h>
@@ -84,8 +86,8 @@ public:
     }
 
     void run() {
-        std::cout << "Server running. Please press enter to stop the server" << std::endl;
-        std::cin.ignore();
+        std::cout << "Server running." << std::endl;
+        pause();
     }
 
 };
