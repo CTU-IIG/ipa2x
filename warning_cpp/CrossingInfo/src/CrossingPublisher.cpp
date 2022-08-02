@@ -27,6 +27,8 @@
 #include <fastdds/dds/publisher/DataWriter.hpp>
 #include <fastdds/dds/publisher/DataWriterListener.hpp>
 #include <fastdds/rtps/transport/UDPv4TransportDescriptor.h>
+#include <fastdds/rtps/common/Locator.h>
+#include <fastdds/dds/domain/DomainParticipant.hpp>
 
 using namespace eprosima::fastdds::dds;
 
@@ -65,10 +67,32 @@ public:
 
     //!Initialize the publisher
     bool init() {
+        // Get default participant QoS
+        DomainParticipantQos client_qos = PARTICIPANT_QOS_DEFAULT;
 
-        DomainParticipantQos participantQos;
-        participantQos.name("Rover dummy PUBLISHER");
-        participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos);
+        // Set participant as CLIENT
+        client_qos.wire_protocol().builtin.discovery_config.discoveryProtocol = eprosima::fastrtps::rtps::DiscoveryProtocol_t::CLIENT;
+
+        // Set SERVER's GUID prefix
+        eprosima::fastrtps::rtps::RemoteServerAttributes remote_server_att;
+        remote_server_att.ReadguidPrefix("44.53.00.5f.45.50.52.4f.53.49.4d.41");
+
+        // Set SERVER's listening locator for PDP
+        eprosima::fastrtps::rtps::Locator_t locator;
+        // Set SERVER's IP address
+        eprosima::fastrtps::rtps::IPLocator::setIPv4(locator, 192, 168, 162, 10);
+        locator.port = 11811;
+        remote_server_att.metatrafficUnicastLocatorList.push_back(locator);
+
+        // Add remote SERVER to CLIENT's list of SERVERs
+        client_qos.wire_protocol().builtin.discovery_config.m_DiscoveryServers.push_back(remote_server_att);
+
+        // Set ping period to 250 ms
+        client_qos.wire_protocol().builtin.discovery_config.discoveryServer_client_syncperiod = eprosima::fastrtps::Duration_t(0, 250000000);
+
+
+        client_qos.name("Rover dummy PUBLISHER");
+        participant_ = DomainParticipantFactory::get_instance()->create_participant(0, client_qos);
         type_.register_type(participant_);
         topic_ = participant_->create_topic("CrossingTopic", "CrossingInfoType", TOPIC_QOS_DEFAULT);
         publisher_ = participant_->create_publisher(PUBLISHER_QOS_DEFAULT, nullptr);
