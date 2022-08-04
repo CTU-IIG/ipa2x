@@ -87,7 +87,10 @@ public:
         type_.register_type(participant_);
         topic_ = participant_->create_topic("CarInfoTopic", "CarInfoType", TOPIC_QOS_DEFAULT);
         publisher_ = participant_->create_publisher(PUBLISHER_QOS_DEFAULT, nullptr);
-        writer_ = publisher_->create_datawriter(topic_, DATAWRITER_QOS_DEFAULT);
+        DataWriterQos dwqos = DATAWRITER_QOS_DEFAULT;
+        dwqos.durability().kind = TRANSIENT_LOCAL_DURABILITY_QOS;
+        dwqos.reliability().kind = RELIABLE_RELIABILITY_QOS;
+        writer_ = publisher_->create_datawriter(topic_, dwqos);
 
     }
 

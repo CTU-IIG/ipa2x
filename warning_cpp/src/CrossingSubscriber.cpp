@@ -126,7 +126,10 @@ public:
         type_.register_type(participant_);
         topic_ = participant_->create_topic("CrossingTopic", "CrossingInfoType", TOPIC_QOS_DEFAULT);
         subscriber_ = participant_->create_subscriber(SUBSCRIBER_QOS_DEFAULT, nullptr);
-        reader_ = subscriber_->create_datareader(topic_, DATAREADER_QOS_DEFAULT, &listener_);
+        DataReaderQos drqos = DATAREADER_QOS_DEFAULT;
+        drqos.durability().kind = TRANSIENT_LOCAL_DURABILITY_QOS;
+        drqos.reliability().kind = RELIABLE_RELIABILITY_QOS;
+        reader_ = subscriber_->create_datareader(topic_, drqos, &listener_);
         
     }
 
