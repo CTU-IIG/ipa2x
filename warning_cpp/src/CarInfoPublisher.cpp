@@ -61,7 +61,7 @@ public:
 
             // Set SERVER's GUID prefix
             eprosima::fastrtps::rtps::RemoteServerAttributes remote_server_att;
-            remote_server_att.ReadguidPrefix("44.53.00.5f.45.50.52.4f.53.49.4d.41");
+            remote_server_att.ReadguidPrefix("69.70.61.32.78.5F.63.76.75.74.be.ef");
 
             // Set SERVER's listening locator for PDP
             eprosima::fastrtps::rtps::Locator_t locator;
@@ -83,7 +83,7 @@ public:
         }
 
         participantQos.name("Rover dummy PUBLISHER");
-        participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos);
+        participant_ = DomainParticipantFactory::get_instance()->create_participant(2, participantQos);
         type_.register_type(participant_);
         topic_ = participant_->create_topic("CarInfoTopic", "CarInfoType", TOPIC_QOS_DEFAULT);
         publisher_ = participant_->create_publisher(PUBLISHER_QOS_DEFAULT, nullptr);
