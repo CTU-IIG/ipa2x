@@ -7,13 +7,8 @@ endif()
 project(warning_cpp)
 
 # Find requirements
-if(NOT fastcdr_FOUND)
-    find_package(fastcdr REQUIRED)
-endif()
-
-if(NOT fastrtps_FOUND)
-    find_package(fastrtps REQUIRED)
-endif()
+find_package(fastcdr REQUIRED)
+find_package(fastrtps REQUIRED)
 
 # Include latest argparse
 include(FetchContent)
