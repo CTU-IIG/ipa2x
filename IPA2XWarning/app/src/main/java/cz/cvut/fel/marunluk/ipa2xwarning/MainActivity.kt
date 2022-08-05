@@ -11,6 +11,8 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.text.InputFilter
+import android.text.Spanned
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -20,6 +22,10 @@ import java.lang.Double.doubleToLongBits
 import java.lang.Double.longBitsToDouble
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
+import android.widget.CompoundButton
+
+
+
 
 
 class MainActivity : AppCompatActivity(), LocationListener {
@@ -39,6 +45,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
     var clongitude: AtomicLong = AtomicLong(0)
     var clatitude: AtomicLong = AtomicLong(0)
     var speed: AtomicInteger = AtomicInteger(0)
+    var IPaddress: IntArray = intArrayOf(192, 168, 162, 10, 11811)
+    var started: Boolean = false
 
     // Threads runnables
     private val pubHandler = InfoHandler(longitude, latitude, speed)
@@ -64,8 +72,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
         mp2 = MediaPlayer.create(this, R.raw.chime2a)
 
         // Start handler threads
-        pubHandlerT.start()
-        subHandlerT.start()
+        //pubHandlerT.start()
+        //subHandlerT.start()
 
     }
 
@@ -122,8 +130,76 @@ class MainActivity : AppCompatActivity(), LocationListener {
         binding.crossingLatitudeText.text = "Crossing Latitude: ${longBitsToDouble(clatitude.get())}"
         binding.crossingLongitudeText.text = "Crossing Longitude: ${longBitsToDouble(clongitude.get())}"
 
+        binding.ipA.filters = arrayOf<InputFilter>(IPFilter())
+        binding.ipB.filters = arrayOf<InputFilter>(IPFilter())
+        binding.ipC.filters = arrayOf<InputFilter>(IPFilter())
+        binding.ipD.filters = arrayOf<InputFilter>(IPFilter())
+        binding.ipA.setText(IPaddress[0].toString())
+        binding.ipB.setText(IPaddress[1].toString())
+        binding.ipC.setText(IPaddress[2].toString())
+        binding.ipD.setText(IPaddress[3].toString())
+        binding.port.setText(IPaddress[4].toString())
+
+        if (started) {
+            binding.ipA.isEnabled = false
+            binding.ipB.isEnabled = false
+            binding.ipC.isEnabled = false
+            binding.ipD.isEnabled = false
+            binding.port.isEnabled = false
+            binding.startButton.isEnabled = false
+            binding.modeSwitch.isEnabled = false
+        }
+
         binding.button.setOnClickListener {
             finishAndRemoveTask()
+        }
+
+        binding.startButton.setOnClickListener {
+
+            started = true
+            readIP()
+            binding.ipA.isEnabled = false
+            binding.ipB.isEnabled = false
+            binding.ipC.isEnabled = false
+            binding.ipD.isEnabled = false
+            binding.port.isEnabled = false
+            binding.startButton.isEnabled = false
+            binding.modeSwitch.isEnabled = false
+
+            pubHandler.setIP(binding.modeSwitch.isChecked, IPaddress)
+            subHandler.setIP(binding.modeSwitch.isChecked, IPaddress)
+
+            // Start handler threads
+            pubHandlerT.start()
+            subHandlerT.start()
+        }
+
+    }
+
+    // Read and parse IP addresses
+    fun readIP() {
+        val ip_A = binding.ipA.text.toString().toIntOrNull()
+        val ip_B = binding.ipB.text.toString().toIntOrNull()
+        val ip_C = binding.ipC.text.toString().toIntOrNull()
+        val ip_D = binding.ipD.text.toString().toIntOrNull()
+        val port = binding.port.text.toString().toIntOrNull()
+
+        if ((port != null) && (port in 1024..65535)) {
+            IPaddress[4] = port
+        } else {
+            binding.port.setText(IPaddress[4].toString())
+        }
+
+        if ((ip_A == null) || (ip_B == null) || (ip_C == null) || (ip_D == null)) {
+            binding.ipA.setText(IPaddress[0].toString())
+            binding.ipB.setText(IPaddress[1].toString())
+            binding.ipC.setText(IPaddress[2].toString())
+            binding.ipD.setText(IPaddress[3].toString())
+        } else {
+            IPaddress[0] = ip_A
+            IPaddress[1] = ip_B
+            IPaddress[2] = ip_C
+            IPaddress[3] = ip_D
         }
     }
 
@@ -194,5 +270,21 @@ class MainActivity : AppCompatActivity(), LocationListener {
         }
     }
 
+    inner class IPFilter() : InputFilter {
+        private var ipMin: Int = 0
+        private var ipMax: Int = 255
+
+        override fun filter(source: CharSequence, start: Int, end: Int, dest: Spanned, dStart: Int, dEnd: Int): CharSequence? {
+            try {
+                val input = Integer.parseInt(dest.toString() + source.toString())
+                if ((ipMin <= input) && (input <= ipMax)) {
+                    return null
+                }
+            } catch (e: NumberFormatException) {
+                e.printStackTrace()
+            }
+            return ""
+        }
+    }
 
 }

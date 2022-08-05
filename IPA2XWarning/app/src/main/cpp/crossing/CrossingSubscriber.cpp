@@ -127,51 +127,64 @@ public:
     }
 
     //!Initialize the subscriber
-    bool init() {
+    bool init(bool server, std::vector<int> ip) {
 
         DomainParticipantQos participantQos = PARTICIPANT_QOS_DEFAULT;
 
-        // Set participant as CLIENT
-        participantQos.wire_protocol().builtin.discovery_config.discoveryProtocol = eprosima::fastrtps::rtps::DiscoveryProtocol_t::CLIENT;
+        if (server) {
 
-        // Set SERVER's GUID prefix
-        eprosima::fastrtps::rtps::RemoteServerAttributes remote_server_att;
-        remote_server_att.ReadguidPrefix("44.53.00.5f.45.50.52.4f.53.49.4d.41");
+            // Set participant as CLIENT
+            participantQos.wire_protocol().builtin.discovery_config.discoveryProtocol = eprosima::fastrtps::rtps::DiscoveryProtocol_t::CLIENT;
 
-        // Set SERVER's listening locator for PDP
-        eprosima::fastrtps::rtps::Locator_t locator;
-        eprosima::fastrtps::rtps::IPLocator::setIPv4(locator, 192, 168, 162, 10);
-        //eprosima::fastrtps::rtps::IPLocator::setIPv4(locator, 185, 63, 96, 172);
-        locator.port = 11811;
-        remote_server_att.metatrafficUnicastLocatorList.push_back(locator);
+            // Set SERVER's GUID prefix
+            eprosima::fastrtps::rtps::RemoteServerAttributes remote_server_att;
+            remote_server_att.ReadguidPrefix("69.70.61.32.78.5F.63.76.75.74.be.ef");
 
-        // Add remote SERVER to CLIENT's list of SERVERs
-        participantQos.wire_protocol().builtin.discovery_config.m_DiscoveryServers.push_back(remote_server_att);
+            // Set SERVER's listening locator for PDP
+            eprosima::fastrtps::rtps::Locator_t locator;
+            // Set SERVER's IP address
+            eprosima::fastrtps::rtps::IPLocator::setIPv4(locator, ip[0], ip[1], ip[2], ip[3]);
+            locator.port = ip[4];
+            remote_server_att.metatrafficUnicastLocatorList.push_back(locator);
 
-        // Set ping period to 250 ms
-        participantQos.wire_protocol().builtin.discovery_config.discoveryServer_client_syncperiod = eprosima::fastrtps::Duration_t(0, 250000000);
+            // Add remote SERVER to CLIENT's list of SERVERs
+            participantQos.wire_protocol().builtin.discovery_config.m_DiscoveryServers.push_back(remote_server_att);
+
+            // Set ping period to 250 ms
+            participantQos.wire_protocol().builtin.discovery_config.discoveryServer_client_syncperiod = eprosima::fastrtps::Duration_t(0, 250000000);
+        }
+
         participantQos.name("ANDROID SUBSCRIBER");
-        participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos);
+        participant_ = DomainParticipantFactory::get_instance()->create_participant(2, participantQos);
         if (participant_ == nullptr) { return false; }
         type_.register_type(participant_);
         topic_ = participant_->create_topic("CrossingTopic", "CrossingInfoType", TOPIC_QOS_DEFAULT);
         if (topic_ == nullptr) { return false; }
         subscriber_ = participant_->create_subscriber(SUBSCRIBER_QOS_DEFAULT, nullptr);
         if (subscriber_ == nullptr) { return false; }
-        reader_ = subscriber_->create_datareader(topic_, DATAREADER_QOS_DEFAULT, &listener_);
+        DataReaderQos drqos = DATAREADER_QOS_DEFAULT;
+        drqos.durability().kind = TRANSIENT_LOCAL_DURABILITY_QOS;
+        drqos.reliability().kind = RELIABLE_RELIABILITY_QOS;
+        reader_ = subscriber_->create_datareader(topic_, drqos, &listener_);
         if (reader_ == nullptr) { return false; }
-        return true;
-    }
 
+        return true;
+
+    }
 };
 
 
 
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_cz_cvut_fel_marunluk_ipa2xwarning_CrossingHandler_initCrossingSubscrier(JNIEnv *env, jobject thiz) {
+Java_cz_cvut_fel_marunluk_ipa2xwarning_CrossingHandler_initCrossingSubscrier(JNIEnv *env, jobject thiz,
+                                                                             jboolean server,
+                                                                             jint ip_a, jint ip_b,
+                                                                             jint ip_c, jint ip_d,
+                                                                             jint port) {
     CrossingInfoSubscriber* subscriber = new CrossingInfoSubscriber();
-    if (subscriber->init()) {
+    std::vector<int> addr = {ip_a, ip_b, ip_c, ip_d, port};
+    if (subscriber->init(server, addr)) {
         pthread_key_create(&key, thread_destructor);
         env->GetJavaVM(&java_vm);
         gObject = env->NewGlobalRef(thiz);

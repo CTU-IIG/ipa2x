@@ -65,18 +65,45 @@ public:
     }
 
     //!Initialize the publisher
-    bool init() {
+    bool init(bool server, std::vector<int> ip) {
 
-        DomainParticipantQos participantQos;
+        DomainParticipantQos participantQos = PARTICIPANT_QOS_DEFAULT;
+
+        if (server) {
+
+            // Set participant as CLIENT
+            participantQos.wire_protocol().builtin.discovery_config.discoveryProtocol = eprosima::fastrtps::rtps::DiscoveryProtocol_t::CLIENT;
+
+            // Set SERVER's GUID prefix
+            eprosima::fastrtps::rtps::RemoteServerAttributes remote_server_att;
+            remote_server_att.ReadguidPrefix("69.70.61.32.78.5F.63.76.75.74.be.ef");
+
+            // Set SERVER's listening locator for PDP
+            eprosima::fastrtps::rtps::Locator_t locator;
+            // Set SERVER's IP address
+            eprosima::fastrtps::rtps::IPLocator::setIPv4(locator, ip[0], ip[1], ip[2], ip[3]);
+            locator.port = ip[4];
+            remote_server_att.metatrafficUnicastLocatorList.push_back(locator);
+
+            // Add remote SERVER to CLIENT's list of SERVERs
+            participantQos.wire_protocol().builtin.discovery_config.m_DiscoveryServers.push_back(remote_server_att);
+
+            // Set ping period to 250 ms
+            participantQos.wire_protocol().builtin.discovery_config.discoveryServer_client_syncperiod = eprosima::fastrtps::Duration_t(0, 250000000);
+        }
+
         participantQos.name("ANDROID PUBLISHER");
-        participant_ = DomainParticipantFactory::get_instance()->create_participant(0, participantQos);
+        participant_ = DomainParticipantFactory::get_instance()->create_participant(2, participantQos);
         if (participant_ == nullptr) { return false; }
         type_.register_type(participant_);
         topic_ = participant_->create_topic("CarInfoTopic", "CarInfoType", TOPIC_QOS_DEFAULT);
         if (topic_ == nullptr) { return false; }
         publisher_ = participant_->create_publisher(PUBLISHER_QOS_DEFAULT, nullptr);
         if (publisher_ == nullptr) { return false; }
-        writer_ = publisher_->create_datawriter(topic_, DATAWRITER_QOS_DEFAULT);
+        DataWriterQos dwqos = DATAWRITER_QOS_DEFAULT;
+        dwqos.durability().kind = TRANSIENT_LOCAL_DURABILITY_QOS;
+        dwqos.reliability().kind = RELIABLE_RELIABILITY_QOS;
+        writer_ = publisher_->create_datawriter(topic_, dwqos);
         if (writer_ == nullptr) { return false; }
 
         return true;
@@ -96,9 +123,13 @@ public:
 
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_cz_cvut_fel_marunluk_ipa2xwarning_InfoHandler_initInfoPublisher(JNIEnv *env, jobject thiz) {
+Java_cz_cvut_fel_marunluk_ipa2xwarning_InfoHandler_initInfoPublisher(JNIEnv *env, jobject thiz,
+                                                                     jboolean server, jint ip_a,
+                                                                     jint ip_b, jint ip_c,
+                                                                     jint ip_d, jint port) {
     CarInfoPublisher* publisher = new CarInfoPublisher();
-    if (publisher->init()) {
+    std::vector<int> addr = {ip_a, ip_b, ip_c, ip_d, port};
+    if (publisher->init(false, addr)) {
         return (jlong) publisher;
     }
     delete publisher;

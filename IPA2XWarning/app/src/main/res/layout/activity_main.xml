@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/image"
-        android:layout_width="match_parent"
-        android:layout_height="559dp"
+        android:layout_width="0dp"
+        android:layout_height="450dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -21,12 +21,15 @@
     <TableLayout
         android:id="@+id/tableLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:stretchColumns="0"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image"
-        app:layout_constraintVertical_bias="0.88"
-        tools:layout_editor_absoluteX="1dp">
+        app:layout_constraintVertical_bias="1.0">
 
         <TableRow
             android:layout_width="match_parent"
@@ -107,12 +110,95 @@
                     android:id="@+id/button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
                     android:text="exit"
+                    app:layout_constraintStart_toEndOf="@+id/startButton" />
+
+                <Switch
+                    android:id="@+id/modeSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:minHeight="48dp"
+                    android:text="server"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:layout_editor_absoluteY="1dp" />
+
+                <Button
+                    android:id="@+id/startButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:text="start"
+                    app:layout_constraintStart_toEndOf="@+id/modeSwitch" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="fill_parent"
+                android:layout_height="55dp">
+
+                <EditText
+                    android:id="@+id/ip_d"
+                    android:layout_width="65dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="4dp"
+                    android:ems="10"
+                    android:inputType="phone"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ip_c"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/port"
+                    android:layout_width="70dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="8dp"
+                    android:ems="10"
+                    android:inputType="phone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ip_d"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/ip_c"
+                    android:layout_width="65dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="4dp"
+                    android:ems="10"
+                    android:inputType="phone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ip_b"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/ip_b"
+                    android:layout_width="65dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="4dp"
+                    android:ems="10"
+                    android:inputType="phone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ip_a"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/ip_a"
+                    android:layout_width="65dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:ems="10"
+                    android:inputType="phone"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    tools:ignore="SpeakableTextPresentCheck" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </TableRow>
