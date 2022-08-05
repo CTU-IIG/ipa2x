@@ -4,7 +4,7 @@ if(NOT CMAKE_VERSION VERSION_LESS 3.0)
     cmake_policy(SET CMP0048 NEW)
 endif()
 
-project(warning_cpp)
+project(ipa2x-warning)
 
 # Find requirements
 find_package(fastcdr REQUIRED)
