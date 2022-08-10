@@ -17,8 +17,8 @@
  *
  */
 
-#include "include/CrossingInfoPubSubTypes.h"
-#include "include/GpsPubSubTypes.h"
+#include "CrossingInfoPubSubTypes.h"
+#include "GpsPubSubTypes.h"
 #include "include/parse.hpp"
 
 #include <argparse/argparse.hpp>
