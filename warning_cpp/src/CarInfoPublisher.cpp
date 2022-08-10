@@ -114,7 +114,7 @@ public:
             value = 10000000;
         }
         message_.coords().latitude((5/value) + 50.1027778F);
-        message_.coords().longtitude((5/value) + 14.3945306F);
+        message_.coords().longitude((5/value) + 14.3945306F);
         writer_->write(&message_);
     }
 

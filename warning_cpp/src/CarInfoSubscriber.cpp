@@ -63,7 +63,7 @@ public: class SubListener : public DataReaderListener {
             if (reader->take_next_sample(&message_, &info) == ReturnCode_t::RETCODE_OK) {
                 if (info.valid_data) {
                     samples_++;
-                    std::cout << "Car at " << message_.coords().longtitude() << " " << message_.coords().latitude() << " going " << message_.speed() << " km/h" << std::endl;
+                    std::cout << "Car at " << message_.coords().longitude() << " " << message_.coords().latitude() << " going " << message_.speed() << " km/h" << std::endl;
                 } else {
                     std::cout << "Got invalid data" << std::endl;
                 }

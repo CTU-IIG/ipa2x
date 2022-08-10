@@ -70,7 +70,7 @@ public: class SubListener : public DataReaderListener {
                     } else {
                         std::cout << "Clear of conflict";
                     }
-                    std::cout << " at " << message_.coords().longtitude() << " " << message_.coords().latitude() << std::endl;
+                    std::cout << " at " << message_.coords().longitude() << " " << message_.coords().latitude() << std::endl;
                 } else {
                     std::cout << "Got invalid data" << std::endl;
                 }

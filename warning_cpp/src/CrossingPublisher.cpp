@@ -113,7 +113,7 @@ public:
         message_.danger(danger);
         message_.crossing(crossing);
         message_.coords().latitude(50.1027778F);
-        message_.coords().longtitude(14.3945306F);
+        message_.coords().longitude(14.3945306F);
         writer_->write(&message_);
     }
 
