@@ -113,7 +113,7 @@ public:
     bool publish(int speed, double latitude, double longitude) {
         message_.speed(speed);
         message_.coords().latitude(latitude);
-        message_.coords().longtitude(longitude);
+        message_.coords().longitude(longitude);
         writer_->write(&message_);
         return true;
     }

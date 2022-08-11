@@ -13,7 +13,6 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.text.InputFilter
 import android.text.Spanned
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -22,10 +21,6 @@ import java.lang.Double.doubleToLongBits
 import java.lang.Double.longBitsToDouble
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
-import android.widget.CompoundButton
-
-
-
 
 
 class MainActivity : AppCompatActivity(), LocationListener {
@@ -134,24 +129,50 @@ class MainActivity : AppCompatActivity(), LocationListener {
         binding.ipB.filters = arrayOf<InputFilter>(IPFilter())
         binding.ipC.filters = arrayOf<InputFilter>(IPFilter())
         binding.ipD.filters = arrayOf<InputFilter>(IPFilter())
-        binding.ipA.setText(IPaddress[0].toString())
-        binding.ipB.setText(IPaddress[1].toString())
-        binding.ipC.setText(IPaddress[2].toString())
-        binding.ipD.setText(IPaddress[3].toString())
-        binding.port.setText(IPaddress[4].toString())
+        binding.ipA.isEnabled = false
+        binding.ipB.isEnabled = false
+        binding.ipC.isEnabled = false
+        binding.ipD.isEnabled = false
+        binding.port.isEnabled = false
 
         if (started) {
-            binding.ipA.isEnabled = false
+            /*binding.ipA.isEnabled = false
             binding.ipB.isEnabled = false
             binding.ipC.isEnabled = false
             binding.ipD.isEnabled = false
-            binding.port.isEnabled = false
+            binding.port.isEnabled = false*/
             binding.startButton.isEnabled = false
             binding.modeSwitch.isEnabled = false
         }
 
         binding.button.setOnClickListener {
             finishAndRemoveTask()
+        }
+        
+        binding.modeSwitch.setOnCheckedChangeListener { buttonView, isChecked ->  //Line A
+            if (isChecked) {
+                binding.ipA.isEnabled = true
+                binding.ipB.isEnabled = true
+                binding.ipC.isEnabled = true
+                binding.ipD.isEnabled = true
+                binding.port.isEnabled = true
+                binding.ipA.setText(IPaddress[0].toString())
+                binding.ipB.setText(IPaddress[1].toString())
+                binding.ipC.setText(IPaddress[2].toString())
+                binding.ipD.setText(IPaddress[3].toString())
+                binding.port.setText(IPaddress[4].toString())
+            } else {
+                binding.ipA.isEnabled = false
+                binding.ipB.isEnabled = false
+                binding.ipC.isEnabled = false
+                binding.ipD.isEnabled = false
+                binding.port.isEnabled = false
+                binding.ipA.text.clear()
+                binding.ipB.text.clear()
+                binding.ipC.text.clear()
+                binding.ipD.text.clear()
+                binding.port.text.clear()
+            }
         }
 
         binding.startButton.setOnClickListener {

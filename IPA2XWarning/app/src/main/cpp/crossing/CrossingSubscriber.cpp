@@ -93,7 +93,7 @@ public: class SubListener : public DataReaderListener {
                 if (info.valid_data) {
                     bool danger = message_.danger();
                     bool crossing = message_.crossing();
-                    double lo = message_.coords().longtitude();
+                    double lo = message_.coords().longitude();
                     double la = message_.coords().latitude();
                     env->CallVoidMethod(gObject, gWarningMethod, danger, crossing, lo, la);
                 }

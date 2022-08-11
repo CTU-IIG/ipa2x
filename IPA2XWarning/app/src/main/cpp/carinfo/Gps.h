@@ -122,23 +122,23 @@ public:
             const gps& x) const;
 
     /*!
-     * @brief This function sets a value in member longtitude
-     * @param _longtitude New value for member longtitude
+     * @brief This function sets a value in member longitude
+     * @param _longitude New value for member longitude
      */
-    eProsima_user_DllExport void longtitude(
-            double _longtitude);
+    eProsima_user_DllExport void longitude(
+            double _longitude);
 
     /*!
-     * @brief This function returns the value of member longtitude
-     * @return Value of member longtitude
+     * @brief This function returns the value of member longitude
+     * @return Value of member longitude
      */
-    eProsima_user_DllExport double longtitude() const;
+    eProsima_user_DllExport double longitude() const;
 
     /*!
-     * @brief This function returns a reference to member longtitude
-     * @return Reference to member longtitude
+     * @brief This function returns a reference to member longitude
+     * @return Reference to member longitude
      */
-    eProsima_user_DllExport double& longtitude();
+    eProsima_user_DllExport double& longitude();
 
     /*!
      * @brief This function sets a value in member latitude
@@ -219,7 +219,7 @@ public:
 
 private:
 
-    double m_longtitude;
+    double m_longitude;
     double m_latitude;
 };
 

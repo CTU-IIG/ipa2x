@@ -36,8 +36,8 @@ using namespace eprosima::fastcdr::exception;
 
 gps::gps()
 {
-    // m_longtitude com.eprosima.idl.parser.typecode.PrimitiveTypeCode@4eb7f003
-    m_longtitude = 0.0;
+    // m_longitude com.eprosima.idl.parser.typecode.PrimitiveTypeCode@4eb7f003
+    m_longitude = 0.0;
     // m_latitude com.eprosima.idl.parser.typecode.PrimitiveTypeCode@eafc191
     m_latitude = 0.0;
 
@@ -52,14 +52,14 @@ gps::~gps()
 gps::gps(
         const gps& x)
 {
-    m_longtitude = x.m_longtitude;
+    m_longitude = x.m_longitude;
     m_latitude = x.m_latitude;
 }
 
 gps::gps(
         gps&& x)
 {
-    m_longtitude = x.m_longtitude;
+    m_longitude = x.m_longitude;
     m_latitude = x.m_latitude;
 }
 
@@ -67,7 +67,7 @@ gps& gps::operator =(
         const gps& x)
 {
 
-    m_longtitude = x.m_longtitude;
+    m_longitude = x.m_longitude;
     m_latitude = x.m_latitude;
 
     return *this;
@@ -77,7 +77,7 @@ gps& gps::operator =(
         gps&& x)
 {
 
-    m_longtitude = x.m_longtitude;
+    m_longitude = x.m_longitude;
     m_latitude = x.m_latitude;
 
     return *this;
@@ -87,7 +87,7 @@ bool gps::operator ==(
         const gps& x) const
 {
 
-    return (m_longtitude == x.m_longtitude && m_latitude == x.m_latitude);
+    return (m_longitude == x.m_longitude && m_latitude == x.m_latitude);
 }
 
 bool gps::operator !=(
@@ -134,7 +134,7 @@ void gps::serialize(
         eprosima::fastcdr::Cdr& scdr) const
 {
 
-    scdr << m_longtitude;
+    scdr << m_longitude;
     scdr << m_latitude;
 
 }
@@ -143,36 +143,36 @@ void gps::deserialize(
         eprosima::fastcdr::Cdr& dcdr)
 {
 
-    dcdr >> m_longtitude;
+    dcdr >> m_longitude;
     dcdr >> m_latitude;
 }
 
 /*!
- * @brief This function sets a value in member longtitude
- * @param _longtitude New value for member longtitude
+ * @brief This function sets a value in member longitude
+ * @param _longitude New value for member longitude
  */
-void gps::longtitude(
-        double _longtitude)
+void gps::longitude(
+        double _longitude)
 {
-    m_longtitude = _longtitude;
+    m_longitude = _longitude;
 }
 
 /*!
- * @brief This function returns the value of member longtitude
- * @return Value of member longtitude
+ * @brief This function returns the value of member longitude
+ * @return Value of member longitude
  */
-double gps::longtitude() const
+double gps::longitude() const
 {
-    return m_longtitude;
+    return m_longitude;
 }
 
 /*!
- * @brief This function returns a reference to member longtitude
- * @return Reference to member longtitude
+ * @brief This function returns a reference to member longitude
+ * @return Reference to member longitude
  */
-double& gps::longtitude()
+double& gps::longitude()
 {
-    return m_longtitude;
+    return m_longitude;
 }
 
 /*!
