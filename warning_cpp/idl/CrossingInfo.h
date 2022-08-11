@@ -24,6 +24,8 @@
 
 #include "Gps.h"
 
+#include <fastrtps/utils/fixed_size_string.hpp>
+
 #include <stdint.h>
 #include <array>
 #include <string>
