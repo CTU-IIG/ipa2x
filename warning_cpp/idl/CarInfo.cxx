@@ -36,11 +36,11 @@ using namespace eprosima::fastcdr::exception;
 
 CarInfoType::CarInfoType()
 {
-    // m_speed com.eprosima.idl.parser.typecode.PrimitiveTypeCode@687080dc
+    // m_speed com.eprosima.idl.parser.typecode.PrimitiveTypeCode@59906517
     m_speed = 0;
-    // m_dummy com.eprosima.idl.parser.typecode.StringTypeCode@23d2a7e8
+    // m_dummy com.eprosima.idl.parser.typecode.StringTypeCode@5bfbf16f
     m_dummy ="";
-    // m_coords com.eprosima.fastdds.idl.parser.typecode.StructTypeCode@7a9273a8
+    // m_coords com.eprosima.fastdds.idl.parser.typecode.StructTypeCode@25af5db5
 
 
 }
@@ -142,7 +142,7 @@ void CarInfoType::serialize(
 {
 
     scdr << m_speed;
-    scdr << m_dummy;
+    scdr << m_dummy.c_str();
     scdr << m_coords;
 
 }

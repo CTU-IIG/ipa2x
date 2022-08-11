@@ -36,13 +36,13 @@ using namespace eprosima::fastcdr::exception;
 
 CrossingInfoType::CrossingInfoType()
 {
-    // m_danger com.eprosima.idl.parser.typecode.PrimitiveTypeCode@6b57696f
+    // m_danger com.eprosima.idl.parser.typecode.PrimitiveTypeCode@4a87761d
     m_danger = false;
-    // m_crossing com.eprosima.idl.parser.typecode.PrimitiveTypeCode@5bb21b69
+    // m_crossing com.eprosima.idl.parser.typecode.PrimitiveTypeCode@66d1af89
     m_crossing = false;
-    // m_dummy com.eprosima.idl.parser.typecode.StringTypeCode@6b9651f3
+    // m_dummy com.eprosima.idl.parser.typecode.StringTypeCode@8646db9
     m_dummy ="";
-    // m_coords com.eprosima.fastdds.idl.parser.typecode.StructTypeCode@38bc8ab5
+    // m_coords com.eprosima.fastdds.idl.parser.typecode.StructTypeCode@37374a5e
 
 
 }
@@ -156,7 +156,7 @@ void CrossingInfoType::serialize(
 
     scdr << m_danger;
     scdr << m_crossing;
-    scdr << m_dummy;
+    scdr << m_dummy.c_str();
     scdr << m_coords;
 
 }
