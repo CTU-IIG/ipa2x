@@ -19,7 +19,7 @@
 
 #include "CarInfoPubSubTypes.h"
 #include "GpsPubSubTypes.h"
-#include "include/common.hpp"
+#include "common.hpp"
 
 #include <argparse/argparse.hpp>
 #include <fastdds/dds/domain/DomainParticipantFactory.hpp>

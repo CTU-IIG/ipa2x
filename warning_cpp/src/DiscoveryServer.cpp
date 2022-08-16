@@ -20,7 +20,7 @@
 #include <argparse/argparse.hpp>
 #include <arpa/inet.h>
 #include <unistd.h>
-#include "include/common.hpp"
+#include "common.hpp"
 
 #include <fastdds/dds/domain/DomainParticipantFactory.hpp>
 #include <fastdds/dds/domain/DomainParticipant.hpp>
