@@ -20,6 +20,7 @@
 #include "CarInfoPubSubTypes.h"
 #include "GpsPubSubTypes.h"
 #include "include/parse.hpp"
+#include "include/common.hpp"
 
 #include <argparse/argparse.hpp>
 #include <fastdds/dds/domain/DomainParticipantFactory.hpp>
@@ -94,7 +95,7 @@ public:
 
             // Set SERVER's GUID prefix
             eprosima::fastrtps::rtps::RemoteServerAttributes remote_server_att;
-            remote_server_att.ReadguidPrefix("69.70.61.32.78.5F.63.76.75.74.be.ef");
+            remote_server_att.ReadguidPrefix(IPA2X_GUID_PREFIX);;
 
             // Set SERVER's listening locator for PDP
             eprosima::fastrtps::rtps::Locator_t locator;

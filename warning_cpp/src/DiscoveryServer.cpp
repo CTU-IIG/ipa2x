@@ -21,6 +21,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include "include/parse.hpp"
+#include "include/common.hpp"
 
 #include <fastdds/dds/domain/DomainParticipantFactory.hpp>
 #include <fastdds/dds/domain/DomainParticipant.hpp>
@@ -49,7 +50,7 @@ public:
         // Set participant as SERVER
         server_qos.wire_protocol().builtin.discovery_config.discoveryProtocol = eprosima::fastrtps::rtps::DiscoveryProtocol_t::SERVER;
         // Set SERVER's GUID prefix
-        std::istringstream("69.70.61.32.78.5F.63.76.75.74.be.ef") >> server_qos.wire_protocol().prefix;
+        std::istringstream(IPA2X_GUID_PREFIX) >> server_qos.wire_protocol().prefix;
         // Set SERVER's listening locator for PDP
         eprosima::fastrtps::rtps::Locator_t locator;
         // Set SERVER's IP address
