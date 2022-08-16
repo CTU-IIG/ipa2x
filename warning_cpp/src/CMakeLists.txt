@@ -1,5 +1,5 @@
 add_library(common Common.cpp)
-target_link_libraries(common argparse)
+target_link_libraries(common argparse fastrtps fastcdr)
 
 add_executable(InfoPub CarInfoPublisher.cpp)
 target_link_libraries(InfoPub common idl fastrtps fastcdr argparse)

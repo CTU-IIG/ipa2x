@@ -83,7 +83,7 @@ public:
         }
 
         participantQos.name("Rover dummy PUBLISHER");
-        participant_ = DomainParticipantFactory::get_instance()->create_participant(2, participantQos);
+        participant_ = DomainParticipantFactory::get_instance()->create_participant(IPA2X_DOMAIN_ID, participantQos);
         type_.register_type(participant_);
         topic_ = participant_->create_topic("CarInfoTopic", "CarInfoType", TOPIC_QOS_DEFAULT);
         publisher_ = participant_->create_publisher(PUBLISHER_QOS_DEFAULT, nullptr);

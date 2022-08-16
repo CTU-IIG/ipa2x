@@ -122,7 +122,7 @@ public:
         }
 
         participantQos.name("Dummy rover SUBSCRIBER");
-        participant_ = DomainParticipantFactory::get_instance()->create_participant(2, participantQos);
+        participant_ = DomainParticipantFactory::get_instance()->create_participant(IPA2X_DOMAIN_ID, participantQos);
         type_.register_type(participant_);
         topic_ = participant_->create_topic("CrossingTopic", "CrossingInfoType", TOPIC_QOS_DEFAULT);
         subscriber_ = participant_->create_subscriber(SUBSCRIBER_QOS_DEFAULT, nullptr);

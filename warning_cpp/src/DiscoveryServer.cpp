@@ -59,7 +59,7 @@ public:
 
         // Create SERVER
         server_qos.name("Rover dummy SUBSCRIBER");
-        DomainParticipant* server = DomainParticipantFactory::get_instance()->create_participant(0, server_qos);
+        DomainParticipant* server = DomainParticipantFactory::get_instance()->create_participant(IPA2X_DOMAIN_ID, server_qos);
         printf("Starting server on %u.%u.%u.%u:%u\n", ip[0], ip[1], ip[2], ip[3], ip[4]);
 
     }
