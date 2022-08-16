@@ -59,7 +59,7 @@ public:
         DomainParticipantQos participantQos = PARTICIPANT_QOS_DEFAULT;
 
         if (server) {
-            cout << "Using discovery server" << endl;
+            printf("Using discovery server at %u.%u.%u.%u:%u\n", ip[0], ip[1], ip[2], ip[3], ip[4]);
 
             // Set participant as CLIENT
             participantQos.wire_protocol().builtin.discovery_config.discoveryProtocol = eprosima::fastrtps::rtps::DiscoveryProtocol_t::CLIENT;
@@ -80,9 +80,6 @@ public:
 
             // Set ping period to 250 ms
             participantQos.wire_protocol().builtin.discovery_config.discoveryServer_client_syncperiod = eprosima::fastrtps::Duration_t(0, 250000000);
-
-            printf("Starting subscriber with server discovery expected at %u.%u.%u.%u:%u\n", ip[0], ip[1], ip[2], ip[3], ip[4]);
-
         } else {
             std::cout << "Using simple discovery" << std::endl;
         }
@@ -138,10 +135,9 @@ int main(int argc, char *argv[]) {
         std::exit(1);
     }
 
-    std::vector<int> ip = parseIP(program.get("--ip"));
-
     CrossingInfoPublisher* publisher =
-        new CrossingInfoPublisher((program["--server"] == true), ip);
+        new CrossingInfoPublisher(program.is_used("--server"),
+                                  parseIP(program.get("--server")));
 
     std::cout << "x: crossing" << std::endl << "c: clear" << std::endl << "d: danger" << std::endl << "q: quit" << std::endl;
     char c;

@@ -137,10 +137,8 @@ int main(int argc, char *argv[]) {
         std::exit(1);
     }
 
-    std::vector<int> ip = parseIP(program.get("--ip"));
-
-
-    CarInfoPublisher* publisher = new CarInfoPublisher((program["--server"] == true), ip);
+    CarInfoPublisher* publisher = new CarInfoPublisher(program.is_used("--server"),
+                                                       parseIP(program.get("--server")));
     std::cout << "Type speed (will be used as GPS modifier as well). Type 'Q' to exit." << std::endl;
     std::string c;
     while (1) {

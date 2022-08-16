@@ -168,10 +168,9 @@ int main(int argc, char *argv[]) {
         std::exit(1);
     }
 
-    std::vector<int> ip = parseIP(program.get("--ip"));
-
     std::cout.precision(10);
-    CarInfoSubscriber* subscriber = new CarInfoSubscriber((program["--server"] == true), ip);
+    CarInfoSubscriber* subscriber = new CarInfoSubscriber(program.is_used("--server"),
+                                                          parseIP(program.get("--server")));
     subscriber->run(program.get<int>("count"));
     delete subscriber;
     return 0;
