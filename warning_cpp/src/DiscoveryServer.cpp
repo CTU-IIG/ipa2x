@@ -96,9 +96,9 @@ int main(int argc, char *argv[]) {
         std::exit(1);
     }
 
-    std::vector<int> ip = parseIP(program.get("--ip"));
+    std::vector<int> ip = parseIP(program.get("--listen"));
 
-    CrossingInfoServer* server = new CrossingInfoServer(ip);   
+    CrossingInfoServer* server = new CrossingInfoServer(ip);
     server->run();
     delete server;
 
