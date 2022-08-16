@@ -98,8 +98,6 @@ int main(int argc, char *argv[]) {
 
     std::vector<int> ip = parseIP(program.get("--listen"));
 
-    DiscoveryServer* server = new DiscoveryServer(ip);
-    server->run();
-    delete server;
-
+    DiscoveryServer server(ip);
+    server.run();
 }
