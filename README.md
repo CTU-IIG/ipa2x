@@ -71,19 +71,22 @@ mirroring the screen on the car.
 
 ### VPN
 
-#### Connecting to the VPN
+#### Connecting a phone to the VPN
 
 1. Download WireGuard application from [Google Play](https://play.google.com/store/apps/details?id=com.wireguard.android&hl=cs&gl=US)
-2. Import interface from QR code that was provided by CVUT (*+* &rarr; *Scan from QR code*)
-3. Turn on interface (toggle switch next to interface name)
+2. Import interface configuration from QR code that was provided by CVUT (*+* &rarr; *Scan from QR code*)
+3. Turn on the created interface (toggle switch next to the interface name)
+
+#### Connecting a computer/rover to the VPN
+TODO
 
 #### Testing
 
 1. Run IPA2X Warning Android app.
 2. In the portrait mode switch **on** *Discovery server* toggle.
-3. Enter IP address of *Discovery server* `192.168.162.10:11811` (if not using CVUT server use your own IP and port)
+3. Enter the IP address of the *Discovery server*. The default IP address `192.168.162.10:11811` corresponds to the CVUT discovery server accesible via the VPN.
 4. Press *Start*
-5. Run `./src/CrossPub` (from the `build` subdirectory) with argument `--server 192.168.162.10:11811` (if not using CVUT server use your own IP and port)
+5. Run `./src/CrossPub --server` (from the `build` subdirectory)
 6. Press `x<Enter>` to show the crossing warning on the phone.
 
 ## External resources
