@@ -36,13 +36,13 @@ using namespace eprosima::fastdds::dds;
 
 
 
-class CrossingInfoServer {
+class DiscoveryServer {
 private:
     DomainParticipant* participant_;
 public:
 
     //Constructor
-    CrossingInfoServer(std::vector<int> ip) : participant_(nullptr) {
+    DiscoveryServer(std::vector<int> ip) : participant_(nullptr) {
 
         // Get default participant QoS
         DomainParticipantQos server_qos = PARTICIPANT_QOS_DEFAULT;
@@ -65,7 +65,7 @@ public:
     }
 
     //Destructor
-    virtual ~CrossingInfoServer() {
+    virtual ~DiscoveryServer() {
         DomainParticipantFactory::get_instance()->delete_participant(participant_);
     }
 
@@ -98,7 +98,7 @@ int main(int argc, char *argv[]) {
 
     std::vector<int> ip = parseIP(program.get("--listen"));
 
-    CrossingInfoServer* server = new CrossingInfoServer(ip);
+    DiscoveryServer* server = new DiscoveryServer(ip);
     server->run();
     delete server;
 
