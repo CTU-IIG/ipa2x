@@ -33,6 +33,7 @@
 #include <fastdds/dds/domain/DomainParticipant.hpp>
 
 using namespace eprosima::fastdds::dds;
+using namespace std;
 
 class CrossingInfoPublisher {
 private:
@@ -57,6 +58,7 @@ public:
         DomainParticipantQos participantQos = PARTICIPANT_QOS_DEFAULT;
 
         if (server) {
+            cout << "Using discovery server" << endl;
 
             // Set participant as CLIENT
             participantQos.wire_protocol().builtin.discovery_config.discoveryProtocol = eprosima::fastrtps::rtps::DiscoveryProtocol_t::CLIENT;
@@ -81,7 +83,7 @@ public:
             printf("Starting subscriber with server discovery expected at %u.%u.%u.%u:%u\n", ip[0], ip[1], ip[2], ip[3], ip[4]);
 
         } else {
-            std::cout << "Startrig subscriber with simple discovery" << std::endl;
+            std::cout << "Using simple discovery" << std::endl;
         }
 
         participantQos.name("Rover dummy PUBLISHER");
@@ -123,13 +125,14 @@ public:
 int main(int argc, char *argv[]) {
 
     argparse::ArgumentParser program("CrossPub");
-    std::vector<int> ip = {127, 0, 0, 1, 11811};
+    std::vector<int> ip;
 
     program.add_argument("-i", "--ip")
-        .help("Enter IP address of server machine [xxx.xxx.xxx.xxx] defaults to 127.0.0.1");
+        .help("IP address of the discovery server [xxx.xxx.xxx.xxx[:port]]")
+        .default_value(std::string("127.0.0.1:11811"));
 
     program.add_argument("-s", "--server")
-        .help("Will use server discovery instead of simple (local) discovery")
+        .help("Use discovery server instead of simple (local network multicast) discovery")
         .default_value(false)
         .implicit_value(true);
 
@@ -143,11 +146,11 @@ int main(int argc, char *argv[]) {
         std::exit(1);
     }
 
-    if (auto input = program.present("-i")) {        
-        ip = parseIP(input.value());
-    }
+    ip = parseIP(program.get("--ip"));
 
-    CrossingInfoPublisher* publisher = new CrossingInfoPublisher((program["--server"] == true), ip);
+    CrossingInfoPublisher* publisher =
+        new CrossingInfoPublisher((program["--server"] == true), ip);
+
     std::cout << "x: crossing" << std::endl << "c: clear" << std::endl << "d: danger" << std::endl << "q: quit" << std::endl;
     char c;
     while (std::cin >> c) {
@@ -161,7 +164,7 @@ int main(int argc, char *argv[]) {
             break;
         }
     }
-    
+
     delete publisher;
     return 0;
 
