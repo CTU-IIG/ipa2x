@@ -72,7 +72,7 @@ public:
 
 
     void run() {
-        std::cout << "Server running. Please press enter to stop the server" << std::endl;
+        std::cout << "Server running." << std::endl;
         pause();
     }
 
