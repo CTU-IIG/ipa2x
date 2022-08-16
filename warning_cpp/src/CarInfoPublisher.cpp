@@ -125,16 +125,8 @@ public:
 int main(int argc, char *argv[]) {
 
     argparse::ArgumentParser program("InfoPub");
-    std::vector<int> ip = {127, 0, 0, 1, 11811};
 
-    program.add_argument("-i", "--ip")
-        .help("Enter IP address of server machine [xxx.xxx.xxx.xxx] defaults to 127.0.0.1");
-
-    program.add_argument("-s", "--server")
-        .help("Will use server discovery instead of simple (local) discovery")
-        .default_value(false)
-        .implicit_value(true);
-
+    addCommonDdsArguments(program);
 
     try {
         program.parse_args(argc, argv);
@@ -145,9 +137,8 @@ int main(int argc, char *argv[]) {
         std::exit(1);
     }
 
-    if (auto input = program.present("-i")) {        
-        ip = parseIP(input.value());
-    }
+    std::vector<int> ip = parseIP(program.get("--ip"));
+
 
     CarInfoPublisher* publisher = new CarInfoPublisher((program["--server"] == true), ip);
     std::cout << "Type speed (will be used as GPS modifier as well). Type 'Q' to exit." << std::endl;

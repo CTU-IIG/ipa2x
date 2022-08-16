@@ -83,10 +83,10 @@ public:
 int main(int argc, char *argv[]) {
 
     argparse::ArgumentParser program("DiscoveryServer");
-    std::vector<int> ip = {127, 0, 0, 1, 11811};
 
-    program.add_argument("-i", "--ip")
-        .help("Enter IP address of server machine [xxx.xxx.xxx.xxx] defaults to 127.0.0.1");
+    program.add_argument("-l", "--listen")
+        .help("Listen on the given IP address [xxx.xxx.xxx.xxx[:port]]")
+        .default_value(std::string("127.0.0.1:11811"));
 
     try {
         program.parse_args(argc, argv);
@@ -97,10 +97,7 @@ int main(int argc, char *argv[]) {
         std::exit(1);
     }
 
-    if (auto input = program.present("-i")) {        
-        ip = parseIP(input.value());
-    
-    }
+    std::vector<int> ip = parseIP(program.get("--ip"));
 
     CrossingInfoServer* server = new CrossingInfoServer(ip);   
     server->run();

@@ -126,17 +126,8 @@ public:
 int main(int argc, char *argv[]) {
 
     argparse::ArgumentParser program("CrossPub");
-    std::vector<int> ip;
 
-    program.add_argument("-i", "--ip")
-        .help("IP address of the discovery server [xxx.xxx.xxx.xxx[:port]]")
-        .default_value(std::string("127.0.0.1:11811"));
-
-    program.add_argument("-s", "--server")
-        .help("Use discovery server instead of simple (local network multicast) discovery")
-        .default_value(false)
-        .implicit_value(true);
-
+    addCommonDdsArguments(program);
 
     try {
         program.parse_args(argc, argv);
@@ -147,7 +138,7 @@ int main(int argc, char *argv[]) {
         std::exit(1);
     }
 
-    ip = parseIP(program.get("--ip"));
+    std::vector<int> ip = parseIP(program.get("--ip"));
 
     CrossingInfoPublisher* publisher =
         new CrossingInfoPublisher((program["--server"] == true), ip);

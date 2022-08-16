@@ -151,21 +151,13 @@ public:
 int main(int argc, char *argv[]) {
 
     argparse::ArgumentParser program("InfoSub");
-    std::vector<int> ip = {127, 0, 0, 1, 11811};
 
     program.add_argument("count")
         .help("Set number of expexted messages. 0 or no value will result in infinite amount of samples")
         .scan<'i', int>()
         .default_value(0);
 
-    program.add_argument("-i", "--ip")
-        .help("Enter IP address of server machine [xxx.xxx.xxx.xxx] defaults to 127.0.0.1");
-
-    program.add_argument("-s", "--server")
-        .help("Will use server discovery instead of simple (local) discovery")
-        .default_value(false)
-        .implicit_value(true);
-
+    addCommonDdsArguments(program);
 
     try {
         program.parse_args(argc, argv);
@@ -176,9 +168,7 @@ int main(int argc, char *argv[]) {
         std::exit(1);
     }
 
-    if (auto input = program.present("-i")) {        
-        ip = parseIP(input.value());
-    }
+    std::vector<int> ip = parseIP(program.get("--ip"));
 
     std::cout.precision(10);
     CarInfoSubscriber* subscriber = new CarInfoSubscriber((program["--server"] == true), ip);
