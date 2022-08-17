@@ -73,12 +73,22 @@ mirroring the screen on the car.
 
 #### Connecting a phone to the VPN
 
-1. Download WireGuard application from [Google Play](https://play.google.com/store/apps/details?id=com.wireguard.android&hl=cs&gl=US)
-2. Import interface configuration from QR code that was provided by CVUT (*+* &rarr; *Scan from QR code*)
+1. Download the WireGuard application from [Google Play](https://play.google.com/store/apps/details?id=com.wireguard.android&hl=cs&gl=US).
+2. Import the interface configuration from the QR code provided by CVUT (*+* → *Scan from QR code*)
 3. Turn on the created interface (toggle switch next to the interface name)
 
 #### Connecting a computer/rover to the VPN
-TODO
+
+1. [Install WireGuard](https://www.wireguard.com/install/).
+
+2. Configure the VPN base the credentials provided by CVUT (choose one
+   option below):
+
+   - Newer Linux distributions have WireGuard integrated and it can be
+     configured via the standard UI, i.e. NetworkManager.
+   - Use `wg-quick` command that comes with WireGuard.
+
+        wg-quick up <config-file-from-cvut>
 
 #### Testing
 
