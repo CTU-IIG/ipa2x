@@ -85,10 +85,13 @@ mirroring the screen on the car.
    option below):
 
    - Newer Linux distributions have WireGuard integrated and it can be
-     configured via the standard UI, i.e. NetworkManager.
+     configured via the standard UI. What is required is
+     NetworkManager with version 1.26.2 or higher. Ubuntu 20.10,
+     Fedora 33, and Arch Linux 2020.09.01 or later have this version.
    - Use `wg-quick` command that comes with WireGuard.
 
-        wg-quick up <config-file-from-cvut>
+        mv <config-file-from-cvut>.conf /etc/wireguard/ipa2x.conf
+        wg-quick up ipa2x
 
 #### Testing
 
