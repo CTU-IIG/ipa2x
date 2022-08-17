@@ -18,9 +18,9 @@
  */
 
 #include <argparse/argparse.hpp>
-#include <arpa/inet.h>
-#include <unistd.h>
 #include "common.hpp"
+#include <chrono>
+#include <thread>
 
 #include <fastdds/dds/domain/DomainParticipantFactory.hpp>
 #include <fastdds/dds/domain/DomainParticipant.hpp>
@@ -73,7 +73,9 @@ public:
 
     void run() {
         std::cout << "Server running." << std::endl;
-        pause();
+        // Shitty C++ - "sleep_for(chrono::hours::max())" overflows.
+        // See https://stackoverflow.com/a/42657900/902448
+        std::this_thread::sleep_for(std::chrono::hours(100000));
     }
 
 };
