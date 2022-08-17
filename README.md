@@ -90,8 +90,8 @@ mirroring the screen on the car.
      Fedora 33, and Arch Linux 2020.09.01 or later have this version.
    - Use `wg-quick` command that comes with WireGuard.
 
-        mv <config-file-from-cvut>.conf /etc/wireguard/ipa2x.conf
-        wg-quick up ipa2x
+         mv <config-file-from-cvut>.conf /etc/wireguard/ipa2x.conf
+         wg-quick up ipa2x
 
 #### Testing
 
