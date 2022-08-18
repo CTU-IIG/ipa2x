@@ -145,6 +145,11 @@ class MainActivity : AppCompatActivity(), LocationListener {
         if (started) {
             binding.startButton.isEnabled = false
             binding.modeSwitch.isEnabled = false
+            binding.ipA.isEnabled = false
+            binding.ipB.isEnabled = false
+            binding.ipC.isEnabled = false
+            binding.ipD.isEnabled = false
+            binding.port.isEnabled = false
         }
 
         binding.button.setOnClickListener {
