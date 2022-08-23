@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(ipa2x_car_connect)
 
 ## Find catkin and any catkin packages
-find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs genmsg)
+find_package(catkin REQUIRED COMPONENTS roscpp std_msgs genmsg)
 
 # Find requirements
 find_package(fastcdr REQUIRED)
