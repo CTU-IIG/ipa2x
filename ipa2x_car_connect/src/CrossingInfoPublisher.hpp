@@ -1,12 +1,7 @@
-#include "ros/ros.h"
-#include "std_msgs/UInt8.h"
+#pragma once
 
-
-#include "CrossingInfoPubSubTypes.h"
 #include "GpsPubSubTypes.h"
-#include "common.hpp"
-
-#include <argparse/argparse.hpp>
+#include "CrossingInfoPubSubTypes.h"
 #include <fastdds/dds/domain/DomainParticipantFactory.hpp>
 #include <fastdds/dds/domain/DomainParticipant.hpp>
 #include <fastdds/dds/topic/TypeSupport.hpp>
@@ -16,10 +11,6 @@
 #include <fastdds/rtps/transport/UDPv4TransportDescriptor.h>
 #include <fastdds/rtps/common/Locator.h>
 #include <fastdds/dds/domain/DomainParticipant.hpp>
-
-
-
-#include <sstream>
 
 using namespace eprosima::fastdds::dds;
 using namespace std;
@@ -97,54 +88,11 @@ public:
 
     //!Send a publication
     void publish(bool danger, bool crossing) {
-        std::cout << "Publishing\n";
         message_.danger(danger);
         message_.crossing(crossing);
         message_.coords().latitude(50.1027778F);
         message_.coords().longitude(14.3945306F);
         writer_->write(&message_);
     }
-} *publisher;
 
-void callbackP(const std_msgs::UInt8::ConstPtr& msg) {
-    if (publisher == nullptr) {
-        return;
-    }
-    if (msg->data > 2) {
-        publisher->publish(false, true);
-    } else {
-        publisher->publish(false, false);
-    }
-    std::cout << "Received " << msg->data + 0 << std::endl;
-}
-
-int main(int argc, char *argv[]) {
-
-    publisher = nullptr;
-
-    argparse::ArgumentParser program("IPA2X Connect translator");
-
-    addCommonDdsArguments(program);
-
-    try {
-        program.parse_args(argc, argv);
-    }
-    catch (const std::runtime_error& err) {
-        std::cerr << err.what() << std::endl;
-        std::cerr << program;
-        std::exit(1);
-    }
-
-    publisher = new CrossingInfoPublisher(program.is_used("--server"),
-                                  parseIP(program.get("--server")));
-
-
-    ros::init(argc, argv, "translator");
-    ros::NodeHandle nh;
-    ros::Subscriber subscriber = nh.subscribe("/hipert/state", 1000, callbackP);
-    ros::spin();
-    if (publisher) {
-        delete publisher;
-    }
-    return 0;
-}
+};
