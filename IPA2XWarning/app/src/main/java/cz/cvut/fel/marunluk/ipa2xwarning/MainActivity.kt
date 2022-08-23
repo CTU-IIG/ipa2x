@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
         if (location.hasSpeed()) {
             // Update onscreen speed
-            binding.speedText.text = "Rychlost: ${(location.speed * 3.6).toInt()}"
+            binding.speedText.text = "Speed: ${(location.speed * 3.6).toInt()}"
             // Update stored speed
             speed.set((location.speed * 3.6).toInt())
         }
