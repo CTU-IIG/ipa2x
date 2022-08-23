@@ -11,7 +11,7 @@
 using namespace eprosima::fastdds::dds;
 using namespace std;
 
-CrossingInfoPublisher* publisher;
+CrossingInfoPublisher* publisher = nullptr;
 
 void callbackP(const std_msgs::UInt8::ConstPtr& msg) {
     if (publisher == nullptr) {
@@ -26,8 +26,6 @@ void callbackP(const std_msgs::UInt8::ConstPtr& msg) {
 }
 
 int main(int argc, char *argv[]) {
-
-    publisher = nullptr;
 
     argparse::ArgumentParser program("IPA2X Car Connector");
 
