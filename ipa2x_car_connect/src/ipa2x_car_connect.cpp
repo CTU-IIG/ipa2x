@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 
     publisher = nullptr;
 
-    argparse::ArgumentParser program("IPA2X Connect translator");
+    argparse::ArgumentParser program("IPA2X Car Connector");
 
     addCommonDdsArguments(program);
 
