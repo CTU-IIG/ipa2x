@@ -24,13 +24,10 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 
 add_subdirectory(idl)
 
-add_library(common src/Common.cpp)
-target_link_libraries(common argparse fastrtps fastcdr)
-
 add_executable(dummy src/dummy.cpp)
 target_link_libraries(dummy ${catkin_LIBRARIES})
 
-add_executable(ipa2x_car_connect src/ipa2x_car_connect.cpp)
-target_link_libraries(ipa2x_car_connect common idl fastrtps fastcdr argparse ${catkin_LIBRARIES})
+add_executable(ipa2x_car_connect src/ipa2x_car_connect.cpp src/Common.cpp)
+target_link_libraries(ipa2x_car_connect idl fastrtps fastcdr argparse ${catkin_LIBRARIES})
 
 # %EndTag(FULLTEXT)%
