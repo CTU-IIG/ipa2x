@@ -11,8 +11,7 @@
 using namespace eprosima::fastdds::dds;
 using namespace std;
 
-//CrossingInfoPublisher* publisher;
-std::unique_ptr<CrossingInfoPublisher> publisher;
+CrossingInfoPublisher* publisher;
 
 void callbackP(const std_msgs::UInt8::ConstPtr& msg) {
     if (publisher == nullptr) {
@@ -43,15 +42,15 @@ int main(int argc, char *argv[]) {
         std::exit(1);
     }
 
-    publisher = std::unique_ptr<CrossingInfoPublisher> 
-        (new CrossingInfoPublisher
-        (program.is_used("--server"), parseIP(program.get("--server"))));
+    publisher = new CrossingInfoPublisher
+        (program.is_used("--server"), parseIP(program.get("--server")));
 
 
     ros::init(argc, argv, "ipa2x_car_connect");
     ros::NodeHandle nh;
     ros::Subscriber subscriber = nh.subscribe("/hipert/state", 1000, callbackP);
     ros::spin();
-    publisher.reset();
+    if (publisher)
+        delete publisher;
     return 0;
 }
