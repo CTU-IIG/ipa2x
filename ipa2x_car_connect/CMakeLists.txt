@@ -24,8 +24,8 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 
 add_subdirectory(idl)
 
-add_executable(dummy src/dummy.cpp)
-target_link_libraries(dummy ${catkin_LIBRARIES})
+add_executable(rover-sim src/rover-sim.cpp)
+target_link_libraries(rover-sim ${catkin_LIBRARIES})
 
 add_executable(ipa2x_car_connect src/ipa2x_car_connect.cpp src/Common.cpp)
 target_link_libraries(ipa2x_car_connect idl fastrtps fastcdr argparse ${catkin_LIBRARIES})
