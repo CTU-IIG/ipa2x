@@ -10,13 +10,16 @@ project(ipa2x-warning)
 find_package(fastcdr REQUIRED)
 find_package(fastrtps REQUIRED)
 
-# Include latest argparse
-include(FetchContent)
-FetchContent_Declare(
-    argparse
-    GIT_REPOSITORY https://github.com/p-ranav/argparse.git
-)
-FetchContent_MakeAvailable(argparse)
+find_package(argparse)
+if(NOT argparse_FOUND)
+    # Include latest argparse
+    include(FetchContent)
+    FetchContent_Declare(
+        argparse
+        GIT_REPOSITORY https://github.com/p-ranav/argparse.git
+        )
+    FetchContent_MakeAvailable(argparse)
+endif()
 
 # Set C++17
 include(CheckCXXCompilerFlag)
