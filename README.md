@@ -1,7 +1,7 @@
 # IPA2X: Intelligent Pedestrian Assistant to Everyone
 
-This repository contains contributions of ČVUT to the [IPA2X
-project][].
+This repository contains contributions of
+[ČVUT](https://iid.ciirc.cvut.cz/) to the [IPA2X project][].
 
 [IPA2X project]: https://ipa2x.eu/
 
