@@ -37,6 +37,13 @@ be compiled as follows:
    If you installed Fast DDS differently, you may need to change
    `CMAKE_INSTALL_PREFIX` or remove it completely.
 
+Alternatively, you can build the programs with the [Nix package
+manager](https://nixos.org/download.html#download-nix):
+
+    nix --experimental-features "nix-command flakes" build
+
+The compiled programs will be then located in `result/bin`.
+
 ### Android application
 
 Compiled Android application is available in the [apk
