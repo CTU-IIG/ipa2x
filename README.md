@@ -3,7 +3,7 @@
 This repository contains contributions of ČVUT to the [IPA2X
 project][].
 
-[IPA2X project]: https://rtsl.cps.mw.tum.de/ipa2x
+[IPA2X project]: https://ipa2x.eu/
 
 The main goal is to create an Android application that will run on a
 phone in the car. The application will:
