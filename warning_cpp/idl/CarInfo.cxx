@@ -34,13 +34,18 @@ using namespace eprosima::fastcdr::exception;
 
 #include <utility>
 
+#define CarInfoType_max_cdr_typesize 280ULL;
+#define gps_max_cdr_typesize 16ULL;
+#define CarInfoType_max_key_cdr_typesize 0ULL;
+#define gps_max_key_cdr_typesize 0ULL;
+
 CarInfoType::CarInfoType()
 {
-    // m_speed com.eprosima.idl.parser.typecode.PrimitiveTypeCode@59906517
+    // short m_speed
     m_speed = 0;
-    // m_dummy com.eprosima.idl.parser.typecode.StringTypeCode@5bfbf16f
+    // string m_dummy
     m_dummy ="";
-    // m_coords com.eprosima.fastdds.idl.parser.typecode.StructTypeCode@25af5db5
+    // gps m_coords
 
 
 }
@@ -61,7 +66,7 @@ CarInfoType::CarInfoType(
 }
 
 CarInfoType::CarInfoType(
-        CarInfoType&& x)
+        CarInfoType&& x) noexcept 
 {
     m_speed = x.m_speed;
     m_dummy = std::move(x.m_dummy);
@@ -80,7 +85,7 @@ CarInfoType& CarInfoType::operator =(
 }
 
 CarInfoType& CarInfoType::operator =(
-        CarInfoType&& x)
+        CarInfoType&& x) noexcept
 {
 
     m_speed = x.m_speed;
@@ -106,17 +111,8 @@ bool CarInfoType::operator !=(
 size_t CarInfoType::getMaxCdrSerializedSize(
         size_t current_alignment)
 {
-    size_t initial_alignment = current_alignment;
-
-
-    current_alignment += 2 + eprosima::fastcdr::Cdr::alignment(current_alignment, 2);
-
-
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + 255 + 1;
-
-    current_alignment += gps::getMaxCdrSerializedSize(current_alignment);
-
-    return current_alignment - initial_alignment;
+    static_cast<void>(current_alignment);
+    return CarInfoType_max_cdr_typesize;
 }
 
 size_t CarInfoType::getCdrSerializedSize(
@@ -259,17 +255,12 @@ gps& CarInfoType::coords()
     return m_coords;
 }
 
+
 size_t CarInfoType::getKeyMaxCdrSerializedSize(
         size_t current_alignment)
 {
-    size_t current_align = current_alignment;
-
-
-
-
-
-
-    return current_align;
+    static_cast<void>(current_alignment);
+    return CarInfoType_max_key_cdr_typesize;
 }
 
 bool CarInfoType::isKeyDefined()
@@ -281,5 +272,4 @@ void CarInfoType::serializeKey(
         eprosima::fastcdr::Cdr& scdr) const
 {
     (void) scdr;
-       
 }

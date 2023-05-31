@@ -34,11 +34,14 @@ using namespace eprosima::fastcdr::exception;
 
 #include <utility>
 
+#define gps_max_cdr_typesize 16ULL;
+#define gps_max_key_cdr_typesize 0ULL;
+
 gps::gps()
 {
-    // m_longitude com.eprosima.idl.parser.typecode.PrimitiveTypeCode@4eb7f003
+    // double m_longitude
     m_longitude = 0.0;
-    // m_latitude com.eprosima.idl.parser.typecode.PrimitiveTypeCode@eafc191
+    // double m_latitude
     m_latitude = 0.0;
 
 }
@@ -57,7 +60,7 @@ gps::gps(
 }
 
 gps::gps(
-        gps&& x)
+        gps&& x) noexcept 
 {
     m_longitude = x.m_longitude;
     m_latitude = x.m_latitude;
@@ -74,7 +77,7 @@ gps& gps::operator =(
 }
 
 gps& gps::operator =(
-        gps&& x)
+        gps&& x) noexcept
 {
 
     m_longitude = x.m_longitude;
@@ -99,17 +102,8 @@ bool gps::operator !=(
 size_t gps::getMaxCdrSerializedSize(
         size_t current_alignment)
 {
-    size_t initial_alignment = current_alignment;
-
-
-    current_alignment += 8 + eprosima::fastcdr::Cdr::alignment(current_alignment, 8);
-
-
-    current_alignment += 8 + eprosima::fastcdr::Cdr::alignment(current_alignment, 8);
-
-
-
-    return current_alignment - initial_alignment;
+    static_cast<void>(current_alignment);
+    return gps_max_cdr_typesize;
 }
 
 size_t gps::getCdrSerializedSize(
@@ -204,16 +198,12 @@ double& gps::latitude()
 }
 
 
+
 size_t gps::getKeyMaxCdrSerializedSize(
         size_t current_alignment)
 {
-    size_t current_align = current_alignment;
-
-
-
-
-
-    return current_align;
+    static_cast<void>(current_alignment);
+    return gps_max_key_cdr_typesize;
 }
 
 bool gps::isKeyDefined()
@@ -225,5 +215,4 @@ void gps::serializeKey(
         eprosima::fastcdr::Cdr& scdr) const
 {
     (void) scdr;
-      
 }

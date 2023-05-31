@@ -94,7 +94,7 @@ public:
      * @param x Reference to the object CrossingInfoType that will be copied.
      */
     eProsima_user_DllExport CrossingInfoType(
-            CrossingInfoType&& x);
+            CrossingInfoType&& x) noexcept;
 
     /*!
      * @brief Copy assignment.
@@ -108,7 +108,7 @@ public:
      * @param x Reference to the object CrossingInfoType that will be copied.
      */
     eProsima_user_DllExport CrossingInfoType& operator =(
-            CrossingInfoType&& x);
+            CrossingInfoType&& x) noexcept;
 
     /*!
      * @brief Comparison operator.
@@ -214,11 +214,11 @@ public:
     eProsima_user_DllExport gps& coords();
 
     /*!
-     * @brief This function returns the maximum serialized size of an object
-     * depending on the buffer alignment.
-     * @param current_alignment Buffer alignment.
-     * @return Maximum serialized size.
-     */
+    * @brief This function returns the maximum serialized size of an object
+    * depending on the buffer alignment.
+    * @param current_alignment Buffer alignment.
+    * @return Maximum serialized size.
+    */
     eProsima_user_DllExport static size_t getMaxCdrSerializedSize(
             size_t current_alignment = 0);
 
@@ -276,6 +276,7 @@ private:
     bool m_crossing;
     std::string m_dummy;
     gps m_coords;
+
 };
 
 #endif // _FAST_DDS_GENERATED_CROSSINGINFO_H_

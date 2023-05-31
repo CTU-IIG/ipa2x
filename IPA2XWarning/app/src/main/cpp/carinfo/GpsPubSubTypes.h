@@ -45,7 +45,7 @@ public:
 
     eProsima_user_DllExport gpsPubSubType();
 
-    eProsima_user_DllExport virtual ~gpsPubSubType();
+    eProsima_user_DllExport virtual ~gpsPubSubType() override;
 
     eProsima_user_DllExport virtual bool serialize(
             void* data,

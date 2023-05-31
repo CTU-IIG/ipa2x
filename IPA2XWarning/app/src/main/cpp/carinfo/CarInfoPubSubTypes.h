@@ -45,7 +45,7 @@ public:
 
     eProsima_user_DllExport CarInfoTypePubSubType();
 
-    eProsima_user_DllExport virtual ~CarInfoTypePubSubType();
+    eProsima_user_DllExport virtual ~CarInfoTypePubSubType() override;
 
     eProsima_user_DllExport virtual bool serialize(
             void* data,

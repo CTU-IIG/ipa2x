@@ -34,15 +34,20 @@ using namespace eprosima::fastcdr::exception;
 
 #include <utility>
 
+#define CrossingInfoType_max_cdr_typesize 280ULL;
+#define gps_max_cdr_typesize 16ULL;
+#define CrossingInfoType_max_key_cdr_typesize 0ULL;
+#define gps_max_key_cdr_typesize 0ULL;
+
 CrossingInfoType::CrossingInfoType()
 {
-    // m_danger com.eprosima.idl.parser.typecode.PrimitiveTypeCode@6b9651f3
+    // boolean m_danger
     m_danger = false;
-    // m_crossing com.eprosima.idl.parser.typecode.PrimitiveTypeCode@38bc8ab5
+    // boolean m_crossing
     m_crossing = false;
-    // m_dummy com.eprosima.idl.parser.typecode.StringTypeCode@687080dc
+    // string m_dummy
     m_dummy ="";
-    // m_coords com.eprosima.fastdds.idl.parser.typecode.StructTypeCode@23d2a7e8
+    // gps m_coords
 
 
 }
@@ -65,7 +70,7 @@ CrossingInfoType::CrossingInfoType(
 }
 
 CrossingInfoType::CrossingInfoType(
-        CrossingInfoType&& x)
+        CrossingInfoType&& x) noexcept 
 {
     m_danger = x.m_danger;
     m_crossing = x.m_crossing;
@@ -86,7 +91,7 @@ CrossingInfoType& CrossingInfoType::operator =(
 }
 
 CrossingInfoType& CrossingInfoType::operator =(
-        CrossingInfoType&& x)
+        CrossingInfoType&& x) noexcept
 {
 
     m_danger = x.m_danger;
@@ -113,20 +118,8 @@ bool CrossingInfoType::operator !=(
 size_t CrossingInfoType::getMaxCdrSerializedSize(
         size_t current_alignment)
 {
-    size_t initial_alignment = current_alignment;
-
-
-    current_alignment += 1 + eprosima::fastcdr::Cdr::alignment(current_alignment, 1);
-
-
-    current_alignment += 1 + eprosima::fastcdr::Cdr::alignment(current_alignment, 1);
-
-
-    current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + 255 + 1;
-
-    current_alignment += gps::getMaxCdrSerializedSize(current_alignment);
-
-    return current_alignment - initial_alignment;
+    static_cast<void>(current_alignment);
+    return CrossingInfoType_max_cdr_typesize;
 }
 
 size_t CrossingInfoType::getCdrSerializedSize(
@@ -156,7 +149,7 @@ void CrossingInfoType::serialize(
 
     scdr << m_danger;
     scdr << m_crossing;
-    scdr << m_dummy;
+    scdr << m_dummy.c_str();
     scdr << m_coords;
 
 }
@@ -302,18 +295,12 @@ gps& CrossingInfoType::coords()
     return m_coords;
 }
 
+
 size_t CrossingInfoType::getKeyMaxCdrSerializedSize(
         size_t current_alignment)
 {
-    size_t current_align = current_alignment;
-
-
-
-
-
-
-
-    return current_align;
+    static_cast<void>(current_alignment);
+    return CrossingInfoType_max_key_cdr_typesize;
 }
 
 bool CrossingInfoType::isKeyDefined()
@@ -325,5 +312,4 @@ void CrossingInfoType::serializeKey(
         eprosima::fastcdr::Cdr& scdr) const
 {
     (void) scdr;
-        
 }

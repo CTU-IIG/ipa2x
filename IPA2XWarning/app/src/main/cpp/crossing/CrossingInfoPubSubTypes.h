@@ -45,7 +45,7 @@ public:
 
     eProsima_user_DllExport CrossingInfoTypePubSubType();
 
-    eProsima_user_DllExport virtual ~CrossingInfoTypePubSubType();
+    eProsima_user_DllExport virtual ~CrossingInfoTypePubSubType() override;
 
     eProsima_user_DllExport virtual bool serialize(
             void* data,
