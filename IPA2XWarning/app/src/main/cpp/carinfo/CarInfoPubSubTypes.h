@@ -28,14 +28,17 @@
 
 #include "CarInfo.h"
 
+#include "GpsPubSubTypes.h"
+
 #if !defined(GEN_API_VER) || (GEN_API_VER != 1)
 #error \
     Generated CarInfo is not compatible with current installed Fast DDS. Please, regenerate it with fastddsgen.
 #endif  // GEN_API_VER
 
+
 /*!
  * @brief This class represents the TopicDataType of the type CarInfoType defined by the user in the IDL file.
- * @ingroup CARINFO
+ * @ingroup CarInfo
  */
 class CarInfoTypePubSubType : public eprosima::fastdds::dds::TopicDataType
 {
@@ -96,6 +99,8 @@ public:
 
     MD5 m_md5;
     unsigned char* m_keyBuffer;
+
 };
 
 #endif // _FAST_DDS_GENERATED_CARINFO_PUBSUBTYPES_H_
+

@@ -45,16 +45,16 @@
 
 #if defined(_WIN32)
 #if defined(EPROSIMA_USER_DLL_EXPORT)
-#if defined(CarInfo_SOURCE)
-#define CarInfo_DllAPI __declspec( dllexport )
+#if defined(CARINFO_SOURCE)
+#define CARINFO_DllAPI __declspec( dllexport )
 #else
-#define CarInfo_DllAPI __declspec( dllimport )
-#endif // CarInfo_SOURCE
+#define CARINFO_DllAPI __declspec( dllimport )
+#endif // CARINFO_SOURCE
 #else
-#define CarInfo_DllAPI
+#define CARINFO_DllAPI
 #endif  // EPROSIMA_USER_DLL_EXPORT
 #else
-#define CarInfo_DllAPI
+#define CARINFO_DllAPI
 #endif // _WIN32
 
 namespace eprosima {
@@ -66,7 +66,7 @@ class Cdr;
 
 /*!
  * @brief This class represents the structure CarInfoType defined by the user in the IDL file.
- * @ingroup CARINFO
+ * @ingroup CarInfo
  */
 class CarInfoType
 {
@@ -260,3 +260,4 @@ private:
 };
 
 #endif // _FAST_DDS_GENERATED_CARINFO_H_
+

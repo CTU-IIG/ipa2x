@@ -216,3 +216,4 @@ void gps::serializeKey(
 {
     (void) scdr;
 }
+

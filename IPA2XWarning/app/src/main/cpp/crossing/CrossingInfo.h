@@ -45,16 +45,16 @@
 
 #if defined(_WIN32)
 #if defined(EPROSIMA_USER_DLL_EXPORT)
-#if defined(CrossingInfo_SOURCE)
-#define CrossingInfo_DllAPI __declspec( dllexport )
+#if defined(CROSSINGINFO_SOURCE)
+#define CROSSINGINFO_DllAPI __declspec( dllexport )
 #else
-#define CrossingInfo_DllAPI __declspec( dllimport )
-#endif // CrossingInfo_SOURCE
+#define CROSSINGINFO_DllAPI __declspec( dllimport )
+#endif // CROSSINGINFO_SOURCE
 #else
-#define CrossingInfo_DllAPI
+#define CROSSINGINFO_DllAPI
 #endif  // EPROSIMA_USER_DLL_EXPORT
 #else
-#define CrossingInfo_DllAPI
+#define CROSSINGINFO_DllAPI
 #endif // _WIN32
 
 namespace eprosima {
@@ -66,7 +66,7 @@ class Cdr;
 
 /*!
  * @brief This class represents the structure CrossingInfoType defined by the user in the IDL file.
- * @ingroup CROSSINGINFO
+ * @ingroup CrossingInfo
  */
 class CrossingInfoType
 {
@@ -280,3 +280,4 @@ private:
 };
 
 #endif // _FAST_DDS_GENERATED_CROSSINGINFO_H_
+

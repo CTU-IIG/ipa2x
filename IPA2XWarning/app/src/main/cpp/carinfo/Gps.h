@@ -44,16 +44,16 @@
 
 #if defined(_WIN32)
 #if defined(EPROSIMA_USER_DLL_EXPORT)
-#if defined(Gps_SOURCE)
-#define Gps_DllAPI __declspec( dllexport )
+#if defined(GPS_SOURCE)
+#define GPS_DllAPI __declspec( dllexport )
 #else
-#define Gps_DllAPI __declspec( dllimport )
-#endif // Gps_SOURCE
+#define GPS_DllAPI __declspec( dllimport )
+#endif // GPS_SOURCE
 #else
-#define Gps_DllAPI
+#define GPS_DllAPI
 #endif  // EPROSIMA_USER_DLL_EXPORT
 #else
-#define Gps_DllAPI
+#define GPS_DllAPI
 #endif // _WIN32
 
 namespace eprosima {
@@ -65,7 +65,7 @@ class Cdr;
 
 /*!
  * @brief This class represents the structure gps defined by the user in the IDL file.
- * @ingroup GPS
+ * @ingroup Gps
  */
 class gps
 {
@@ -227,3 +227,4 @@ private:
 };
 
 #endif // _FAST_DDS_GENERATED_GPS_H_
+

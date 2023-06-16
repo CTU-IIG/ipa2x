@@ -273,3 +273,4 @@ void CarInfoType::serializeKey(
 {
     (void) scdr;
 }
+

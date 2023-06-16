@@ -313,3 +313,4 @@ void CrossingInfoType::serializeKey(
 {
     (void) scdr;
 }
+
