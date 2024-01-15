@@ -3,12 +3,12 @@
 let
   foonathan-memory = stdenv.mkDerivation rec {
     pname = "foonathan_memory";
-    version = "0.7-1";
+    version = "0.7-3";
     src = fetchFromGitHub {
       owner = "foonathan";
       repo = "memory";
       rev = "v${version}";
-      sha256 = "sha256-AnSigXKL5b16b9TOGgpRpUc3SJzQfYhNhygm6Y8XLVA=";
+      sha256 = "sha256-nLBnxPbPKiLCFF2TJgD/eJKJJfzktVBW3SRW2m3WK/s=";
     };
 
     #   patches = [
@@ -30,12 +30,12 @@ let
   };
   fastcdr = stdenv.mkDerivation rec {
     pname = "fastcdr";
-    version = "1.0.24";
+    version = "2.1.3";
     src = fetchFromGitHub {
       owner = "eProsima";
       repo = "Fast-CDR";
       rev = "v${version}";
-      sha256 = "sha256-msPSUAc0P0t7VCDSH+JLd8HYSJguAmftqmLIR9RHDDk=";
+      sha256 = "sha256-eSf6LNTVsGEBXjTmTBjjWKBqs68pbnVcw1p2bi1Asgg=";
     };
 
     nativeBuildInputs = [
@@ -48,12 +48,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fastdds";
-  version = "2.7.0";
+  version = "2.13.1";
   src = fetchFromGitHub {
     owner = "eProsima";
     repo = "Fast-DDS";
     rev = "v${version}";
-    sha256 = "sha256-gsggWI2aBIsnKBx9OBRy4fdvDoAlkAhovFx33/r7Pxs=";
+    sha256 = "sha256-UDM7pruAaoqfEPgpxYdfP2a3tG/ZpR2ajCADZ5ZdIVU=";
   };
 
   nativeBuildInputs = [
