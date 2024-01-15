@@ -1,4 +1,4 @@
-// Copyright 2022, 2023 Czech Technical University in Prague
+// Copyright 2022, 2023, 2024 Czech Technical University in Prague
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@
 #include <fastdds/dds/subscriber/DataReaderListener.hpp>
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
 #include <fastdds/dds/subscriber/SampleInfo.hpp>
+#include <thread>
 
 using namespace eprosima::fastdds::dds;
 
