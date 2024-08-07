@@ -60,10 +60,10 @@ stdenv.mkDerivation rec {
     cmake
   ];
   buildInputs = [
-    asio tinyxml-2
+    asio
   ];
   propagatedBuildInputs = [
-    foonathan-memory fastcdr
+    foonathan-memory fastcdr tinyxml-2
   ];
   passthru = {
     inherit fastcdr foonathan-memory;
