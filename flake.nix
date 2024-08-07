@@ -15,7 +15,7 @@
         };
         fastdds = pkgs.callPackage ./nix/fastdds.nix {};
       in {
-        devShells.x86_64-linux.ros =
+        devShells.ros =
           pkgs.mkShell {
             nativeBuildInputs = [ pkgs.fastddsgen ];
             buildInputs = with pkgs.rosPackages.noetic; [
